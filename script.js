@@ -1,79 +1,166 @@
 /**
  * Portfolio Interactive Scripts
- * Dylan Gonzalez - Software Engineer
+ * Dylan Gonzalez — Software Engineer
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Current Year in Footer
-  const yearElement = document.getElementById('current-year');
-  if (yearElement) {
-    yearElement.textContent = new Date().getFullYear();
+  const yearElements = document.querySelectorAll('#current-year');
+  yearElements.forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
+
+  // 2. Helper to create project card HTML
+  const createProjectCardHTML = (project) => {
+    const tagsHTML = project.tags.map(tag => `<span class="tech-chip">${tag}</span>`).join(' ');
+    
+    return `
+      <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="${project.category}">
+        <div class="space-y-5">
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
+              ${project.categoryLabel}
+            </span>
+            <div class="flex items-center gap-2">
+              <a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl text-zinc-500 hover:text-zinc-900 hover:bg-white/60 transition-colors" title="View Source on GitHub">
+                <i data-lucide="github" class="w-4 h-4"></i>
+              </a>
+              <a href="projects.html#${project.id}" class="p-2 rounded-xl text-zinc-500 hover:text-zinc-900 hover:bg-white/60 transition-colors" title="Project Details">
+                <i data-lucide="external-link" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="space-y-2.5">
+            <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
+              ${project.title}
+            </h3>
+            <p class="text-sm text-zinc-600 leading-relaxed font-normal">
+              ${project.description}
+            </p>
+          </div>
+
+          <div class="p-4 glass-subbox rounded-2xl space-y-2">
+            <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
+              <span>${project.metric1Label}</span>
+              <span class="font-mono text-zinc-900">${project.metric1Value}</span>
+            </div>
+            <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
+              <span>${project.metric2Label}</span>
+              <span class="font-mono text-zinc-800">${project.metric2Value}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
+          ${tagsHTML}
+        </div>
+      </article>
+    `;
+  };
+
+  // 3. Render Projects on Home Page (Cut off after first 2 + Dynamic "See X more...")
+  const homeProjectsContainer = document.getElementById('home-projects-container');
+  const seeMoreBtn = document.getElementById('see-more-projects-btn');
+  const seeMoreCount = document.getElementById('see-more-projects-count');
+
+  if (homeProjectsContainer && typeof PROJECTS_DATA !== 'undefined') {
+    // Render only first 2
+    const firstTwo = PROJECTS_DATA.slice(0, 2);
+    homeProjectsContainer.innerHTML = firstTwo.map(createProjectCardHTML).join('');
+
+    // Dynamic count calculation
+    const remainingCount = Math.max(0, PROJECTS_DATA.length - 2);
+    if (seeMoreCount) {
+      seeMoreCount.textContent = remainingCount;
+    }
+    if (seeMoreBtn) {
+      seeMoreBtn.innerHTML = `
+        <span>See ${remainingCount} more projects</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      `;
+    }
   }
 
-  // 2. Active Tab Scroll Spy
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
+  // 4. Render All Projects on Projects Page
+  const allProjectsContainer = document.getElementById('all-projects-container');
+  if (allProjectsContainer && typeof PROJECTS_DATA !== 'undefined') {
+    allProjectsContainer.innerHTML = PROJECTS_DATA.map(createProjectCardHTML).join('');
+  }
 
-  const updateActiveNav = () => {
-    const scrollY = window.pageYOffset;
+  // 5. Re-initialize Lucide icons after dynamic rendering
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
 
-    sections.forEach(current => {
-      const sectionHeight = current.offsetHeight;
-      const sectionTop = current.offsetTop - 180;
-      const sectionId = current.getAttribute('id');
+  // 6. Project Filter Buttons (Works on both index and projects page)
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const setupFiltering = () => {
+    const projectCards = document.querySelectorAll('.project-card');
 
-      if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-        navLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('data-section') === sectionId) {
-            link.classList.add('active');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('active');
+          b.classList.add('text-zinc-600');
+        });
+
+        btn.classList.add('active');
+        btn.classList.remove('text-zinc-600');
+
+        const filterValue = btn.getAttribute('data-filter');
+
+        projectCards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filterValue === 'all' || category === filterValue) {
+            card.style.display = 'flex';
+            setTimeout(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, 10);
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(8px)';
+            setTimeout(() => {
+              card.style.display = 'none';
+            }, 200);
           }
         });
-      }
+      });
     });
   };
 
-  window.addEventListener('scroll', updateActiveNav, { passive: true });
-  updateActiveNav();
+  setupFiltering();
 
-  // 3. Project Filter Buttons
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const projectCards = document.querySelectorAll('.project-card');
+  // 7. Active Tab Scroll Spy (for index.html sections)
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link[data-section]');
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Remove active from all buttons
-      filterBtns.forEach(b => {
-        b.classList.remove('active');
-        b.classList.add('text-zinc-600');
-      });
+  if (sections.length > 0 && navLinks.length > 0) {
+    const updateActiveNav = () => {
+      const scrollY = window.pageYOffset;
 
-      // Set active on clicked button
-      btn.classList.add('active');
-      btn.classList.remove('text-zinc-600');
+      sections.forEach(current => {
+        const sectionHeight = current.offsetHeight;
+        const sectionTop = current.offsetTop - 180;
+        const sectionId = current.getAttribute('id');
 
-      const filterValue = btn.getAttribute('data-filter');
-
-      projectCards.forEach(card => {
-        const category = card.getAttribute('data-category');
-        if (filterValue === 'all' || category === filterValue) {
-          card.style.display = 'flex';
-          setTimeout(() => {
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-          }, 10);
-        } else {
-          card.style.opacity = '0';
-          card.style.transform = 'translateY(8px)';
-          setTimeout(() => {
-            card.style.display = 'none';
-          }, 200);
+        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('data-section') === sectionId) {
+              link.classList.add('active');
+            }
+          });
         }
       });
-    });
-  });
+    };
 
-  // 4. Toast Notification System
+    window.addEventListener('scroll', updateActiveNav, { passive: true });
+    updateActiveNav();
+  }
+
+  // 8. Toast Notification System
   const toast = document.getElementById('toast');
   const toastMsg = document.getElementById('toast-msg');
   let toastTimeout;
@@ -92,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3200);
   };
 
-  // 5. Interactive Contact Form Submission
+  // 9. Interactive Contact Form Submission
   const contactForm = document.getElementById('contact-form');
   const submitBtn = document.getElementById('submit-btn');
 

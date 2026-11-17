@@ -201,562 +201,40 @@
 
 
     <!-- ==================== PROJECTS SECTION ==================== -->
-    <section id="projects" class="space-y-16 scroll-mt-36">
+    <section id="projects" class="space-y-12 scroll-mt-36">
 
       <!-- Section Header -->
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-zinc-200/80 pb-8">
         <div class="space-y-2">
           <div class="inline-flex items-center gap-2 px-3.5 py-1 glass-subbox rounded-xl text-xs font-normal text-zinc-700">
             <i data-lucide="folder-git-2" class="w-3.5 h-3.5"></i>
-            <span>Real-World Engineering</span>
+            <span>Featured Work</span>
           </div>
           <h2 class="text-3xl sm:text-4xl font-normal text-zinc-900 tracking-tight">Technical Projects</h2>
           <p class="text-sm sm:text-base text-zinc-500 font-normal max-w-xl">
-            Autonomous Mars rovers, emergency vehicle ECUs, robotic arm motion planners, and turnkey industrial assembly lines.
+            Selected engineering work across robotics, vehicle ECUs, industrial automation, and software tooling.
           </p>
         </div>
 
-        <!-- Filter Pills: robotics, industrial automation, web, embedded -->
-        <div class="flex flex-wrap items-center gap-1.5 glass-panel p-1.5 rounded-2xl shadow-xs" id="project-filters">
-          <button class="filter-btn active px-3.5 py-1.5 rounded-xl text-xs font-normal transition-all" data-filter="all">All</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-normal text-zinc-600 hover:text-zinc-900 transition-all" data-filter="robotics">Robotics</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-normal text-zinc-600 hover:text-zinc-900 transition-all" data-filter="industrial-automation">Industrial Automation</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-normal text-zinc-600 hover:text-zinc-900 transition-all" data-filter="embedded">Embedded</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-normal text-zinc-600 hover:text-zinc-900 transition-all" data-filter="web">Web</button>
-        </div>
+        <a href="projects.html" class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 transition-colors">
+          <span>View all projects</span>
+          <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+        </a>
       </div>
 
-      <!-- Projects Grid (Glassy Finish Cards) -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="projects-container">
-
-        <!-- Project 1: Monash Nova Rover (Robotics) -->
-        <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="robotics">
-          <div class="space-y-5">
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-                Robotics &bull; Monash Nova Rover
-              </span>
-              <div class="flex items-center gap-2">
-                <a href="https://github.com/dylcg" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl text-zinc-500 hover:text-zinc-900 hover:bg-white/60 transition-colors" title="View Source">
-                  <i data-lucide="github" class="w-4 h-4"></i>
-                </a>
-              </div>
-            </div>
-
-            <div class="space-y-2.5">
-              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
-                Mars &amp; Lunar Rover Autonomous Navigation Stack
-              </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-                Autonomous driving software for international competitions (URC Utah and ARC Adelaide). Migrated motor control to ros2_control to decouple control logic from specific motor drivers, built the Nav2 navigation stack, and engineered custom URDF Gazebo simulations.
-              </p>
-            </div>
-
-            <div class="p-4 glass-subbox rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Competitions:</span>
-                <span class="font-mono text-zinc-900">University Rover Challenge (USA) &amp; ARC</span>
-              </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Architecture:</span>
-                <span class="font-mono text-zinc-800">ros2_control hardware abstraction</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
-            <span class="tech-chip">ROS 2</span>
-            <span class="tech-chip">Nav2</span>
-            <span class="tech-chip">ros2_control</span>
-            <span class="tech-chip">C++</span>
-            <span class="tech-chip">Gazebo</span>
-            <span class="tech-chip">Nix</span>
-          </div>
-        </article>
-
-        <!-- Project 2: Honours Thesis Delivery Robot (Robotics) -->
-        <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="robotics">
-          <div class="space-y-5">
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-                Robotics &bull; Honours Thesis
-              </span>
-              <div class="flex items-center gap-2">
-                <a href="https://github.com/dylcg" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl text-zinc-500 hover:text-zinc-900 hover:bg-white/60 transition-colors" title="View Details">
-                  <i data-lucide="external-link" class="w-4 h-4"></i>
-                </a>
-              </div>
-            </div>
-
-            <div class="space-y-2.5">
-              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
-                Infrastructure-Guided Autonomous Delivery Robot
-              </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-                Autonomous delivery robot navigated entirely by roadside infrastructure cameras rather than onboard perception. Owned full software stack: trained YOLOv8 keypoint models for external localization and built distributed Raspberry Pi GStreamer video pipelines.
-              </p>
-            </div>
-
-            <div class="p-4 glass-subbox rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Perception strategy:</span>
-                <span class="font-mono text-zinc-900">Zero onboard perception (roadside vision)</span>
-              </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Vision pipeline:</span>
-                <span class="font-mono text-zinc-800">YOLOv8 + GStreamer + ZED 2i</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
-            <span class="tech-chip">ROS 2</span>
-            <span class="tech-chip">Nav2</span>
-            <span class="tech-chip">YOLOv8</span>
-            <span class="tech-chip">Isaac ROS</span>
-            <span class="tech-chip">ODrive</span>
-            <span class="tech-chip">GStreamer</span>
-          </div>
-        </article>
-
-        <!-- Project 3: Robotic Bin-Picking (Robotics) -->
-        <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="robotics">
-          <div class="space-y-5">
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-                Robotics &bull; Bosch Rexroth Germany
-              </span>
-              <div class="flex items-center gap-2">
-                <span class="p-2 rounded-xl text-zinc-400">
-                  <i data-lucide="shield-check" class="w-4 h-4"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="space-y-2.5">
-              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
-                Robotic Bin-Picking &amp; Grasp Point Tool
-              </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-                Built a Python and RoboDK tool computing every feasible grasp point for objects inside bins. Accounted for 6-DOF robot arm reachability limits, end-effector collision envelopes, and complex bin geometry in industrial automation cells.
-              </p>
-            </div>
-
-            <div class="p-4 glass-subbox rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Location:</span>
-                <span class="font-mono text-zinc-900">Ludwigsburg, Germany</span>
-              </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Kinematics:</span>
-                <span class="font-mono text-zinc-800">RoboDK 6-DOF reachability analysis</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
-            <span class="tech-chip">Python</span>
-            <span class="tech-chip">RoboDK</span>
-            <span class="tech-chip">Robotics Kinematics</span>
-            <span class="tech-chip">ctrlX OS</span>
-          </div>
-        </article>
-
-        <!-- Project 4: Vision-Guided Micro-Manipulation Robot (Robotics) -->
-        <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="robotics">
-          <div class="space-y-5">
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-                Robotics &bull; Bosch Australia
-              </span>
-              <div class="flex items-center gap-2">
-                <span class="p-2 rounded-xl text-zinc-400">
-                  <i data-lucide="crosshair" class="w-4 h-4"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="space-y-2.5">
-              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
-                Vision-Guided Micro-Manipulation Robot
-              </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-                Engineered the motion control and visual servoing pipeline for a Mecademic Meca500 robot arm performing high-precision procedures on microscopic components. Implemented Python, OpenCV, and YOLOv8 on Basler industrial cameras.
-              </p>
-            </div>
-
-            <div class="p-4 glass-subbox rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Precision:</span>
-                <span class="font-mono text-zinc-900">Micron-level manipulation</span>
-              </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Hardware:</span>
-                <span class="font-mono text-zinc-800">Meca500 arm &bull; Basler industrial camera</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
-            <span class="tech-chip">Python</span>
-            <span class="tech-chip">OpenCV</span>
-            <span class="tech-chip">YOLOv8</span>
-            <span class="tech-chip">Meca500</span>
-            <span class="tech-chip">Basler</span>
-          </div>
-        </article>
-
-        <!-- Project 5: Assembly Line PLC Program (Industrial Automation) -->
-        <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="industrial-automation">
-          <div class="space-y-5">
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-                Industrial Automation &bull; Bosch Australia
-              </span>
-              <div class="flex items-center gap-2">
-                <span class="p-2 rounded-xl text-zinc-400">
-                  <i data-lucide="factory" class="w-4 h-4"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="space-y-2.5">
-              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
-                Production Assembly Line PLC System
-              </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-                Wrote the complete PLC program for a commercial customer assembly line on Bosch Rexroth ctrlX. Integrated Cognex DataMan vision cameras, Datalogic barcode scanners, and Rexroth Nexo smart nutrunners, with on-site customer commissioning in Sydney.
-              </p>
-            </div>
-
-            <div class="p-4 glass-subbox rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Customer site:</span>
-                <span class="font-mono text-zinc-900">Sydney, Australia</span>
-              </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Integrations:</span>
-                <span class="font-mono text-zinc-800">Cognex DataMan &bull; Nexo nutrunners</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
-            <span class="tech-chip">ctrlX PLC</span>
-            <span class="tech-chip">Structured Text</span>
-            <span class="tech-chip">Cognex</span>
-            <span class="tech-chip">Datalogic</span>
-            <span class="tech-chip">Modbus TCP</span>
-          </div>
-        </article>
-
-        <!-- Project 6: ctrlX Shared Memory IPC Bridge (Industrial Automation) -->
-        <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="industrial-automation">
-          <div class="space-y-5">
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-                Industrial Automation &bull; Bosch Rexroth Germany
-              </span>
-              <div class="flex items-center gap-2">
-                <span class="p-2 rounded-xl text-zinc-400">
-                  <i data-lucide="layers" class="w-4 h-4"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="space-y-2.5">
-              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
-                Real-Time ctrlX PLC Shared Memory IPC &amp; Socket Bridge
-              </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-                Implemented real-time cyclic data exchange between the ctrlX PLC runtime and Data Layer using shared memory IPC in C++ and Structured Text. Built an optimized socket bridge snap service utilizing FlatBuffers serialization on Ubuntu Core.
-              </p>
-            </div>
-
-            <div class="p-4 glass-subbox rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>IPC Mechanism:</span>
-                <span class="font-mono text-zinc-900">Cyclic Shared Memory (C++)</span>
-              </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Serialization:</span>
-                <span class="font-mono text-zinc-800">FlatBuffers &bull; Ubuntu Core Snaps</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
-            <span class="tech-chip">C++</span>
-            <span class="tech-chip">Structured Text</span>
-            <span class="tech-chip">FlatBuffers</span>
-            <span class="tech-chip">Shared Memory</span>
-            <span class="tech-chip">Ubuntu Core</span>
-          </div>
-        </article>
-
-        <!-- Project 7: Emergency Vehicle ECUs (Embedded) -->
-        <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="embedded">
-          <div class="space-y-5">
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-                Embedded &bull; Relativity Engineering
-              </span>
-              <div class="flex items-center gap-2">
-                <span class="p-2 rounded-xl text-zinc-400">
-                  <i data-lucide="siren" class="w-4 h-4"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="space-y-2.5">
-              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
-                Emergency Service Fleet Custom ECU Firmware
-              </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-                Designed, built, and deployed C++ firmware (FreeRTOS, ESP-IDF) for custom automotive electronic control units currently operating in ~70 emergency service vehicles across Victoria. Performed extensive CAN-bus reverse engineering to control auxiliary vehicle systems.
-              </p>
-            </div>
-
-            <div class="p-4 glass-subbox rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Fleet deployment:</span>
-                <span class="font-mono text-zinc-900">~70 active emergency vehicles in Victoria</span>
-              </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Platform:</span>
-                <span class="font-mono text-zinc-800">FreeRTOS &bull; ESP-IDF &bull; CAN bus</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
-            <span class="tech-chip">C++</span>
-            <span class="tech-chip">FreeRTOS</span>
-            <span class="tech-chip">ESP-IDF</span>
-            <span class="tech-chip">CAN bus</span>
-            <span class="tech-chip">Automotive</span>
-          </div>
-        </article>
-
-        <!-- Project 8: V2X / DSRC Test Platform (Embedded) -->
-        <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="embedded">
-          <div class="space-y-5">
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-                Embedded &bull; Relativity Engineering
-              </span>
-              <div class="flex items-center gap-2">
-                <span class="p-2 rounded-xl text-zinc-400">
-                  <i data-lucide="radio" class="w-4 h-4"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="space-y-2.5">
-              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
-                NXP i.MX8 V2X / DSRC Vehicle Connectivity Platform
-              </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-                Engineered an embedded Linux test product on NXP i.MX8 hardware to evaluate V2X (Vehicle-to-Everything) and DSRC communication performance between vehicles in dynamic testing scenarios, using high-precision GNSS and dedicated DSRC antennae.
-              </p>
-            </div>
-
-            <div class="p-4 glass-subbox rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>SoC Architecture:</span>
-                <span class="font-mono text-zinc-900">Embedded Linux on NXP i.MX8</span>
-              </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Wireless Protocol:</span>
-                <span class="font-mono text-zinc-800">DSRC &bull; GNSS RF Antennas</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
-            <span class="tech-chip">Embedded Linux</span>
-            <span class="tech-chip">NXP i.MX8</span>
-            <span class="tech-chip">V2X</span>
-            <span class="tech-chip">DSRC</span>
-            <span class="tech-chip">GNSS</span>
-          </div>
-        </article>
-
-        <!-- Project 9: Connected Autonomous Electric Vehicles (Embedded) -->
-        <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="embedded">
-          <div class="space-y-5">
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-                Embedded &bull; MCAV
-              </span>
-              <div class="flex items-center gap-2">
-                <span class="p-2 rounded-xl text-zinc-400">
-                  <i data-lucide="car" class="w-4 h-4"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="space-y-2.5">
-              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
-                Drive-by-Wire Autonomous Vehicle Stacks &amp; CARLA HIL
-              </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-                Maintained sensor stacks on two drive-by-wire electric vehicles (StreetDrone Renault Twizy and Nissan e-NV200). Executed hardware-in-the-loop (HIL) demonstrations linking the physical Twizy to the CARLA autonomous driving simulator.
-              </p>
-            </div>
-
-            <div class="p-4 glass-subbox rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Research vehicles:</span>
-                <span class="font-mono text-zinc-900">StreetDrone Twizy &amp; Nissan e-NV200</span>
-              </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Simulation:</span>
-                <span class="font-mono text-zinc-800">CARLA Simulator HIL Integration</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
-            <span class="tech-chip">Drive-by-Wire</span>
-            <span class="tech-chip">CARLA</span>
-            <span class="tech-chip">HIL</span>
-            <span class="tech-chip">Docker</span>
-            <span class="tech-chip">CAN bus</span>
-          </div>
-        </article>
-
-        <!-- Project 10: Multi-Agent Drone Swarm Visualizer (Web) -->
-        <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="web">
-          <div class="space-y-5">
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-                Web &bull; Monash UAS
-              </span>
-              <div class="flex items-center gap-2">
-                <a href="https://github.com/dylcg" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl text-zinc-500 hover:text-zinc-900 hover:bg-white/60 transition-colors" title="View Source">
-                  <i data-lucide="github" class="w-4 h-4"></i>
-                </a>
-              </div>
-            </div>
-
-            <div class="space-y-2.5">
-              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
-                Drone Swarm Multi-Agent Pathfinding Visualizer
-              </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-                Developed a pathfinding visualizer web application using C# and ASP.NET for an autonomous indoor swarm of drones. Implemented multi-agent pathfinding (MAPF) utilizing A* and Conflict-Based Search (CBS) to compute and resolve conflict-free 3D drone routes.
-              </p>
-            </div>
-
-            <div class="p-4 glass-subbox rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Algorithm:</span>
-                <span class="font-mono text-zinc-900">A* &bull; Conflict-Based Search (CBS)</span>
-              </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Web Stack:</span>
-                <span class="font-mono text-zinc-800">C# &bull; ASP.NET Web App</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
-            <span class="tech-chip">C#</span>
-            <span class="tech-chip">ASP.NET</span>
-            <span class="tech-chip">A* Search</span>
-            <span class="tech-chip">CBS</span>
-            <span class="tech-chip">Swarm Robotics</span>
-          </div>
-        </article>
-
-        <!-- Project 11: Kamylla Inventory Management Web App (Web) -->
-        <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="web">
-          <div class="space-y-5">
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-                Web &bull; Monash UAS
-              </span>
-              <div class="flex items-center gap-2">
-                <span class="p-2 rounded-xl text-zinc-400">
-                  <i data-lucide="scan-barcode" class="w-4 h-4"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="space-y-2.5">
-              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
-                Kamylla: Workshop Inventory Web Application
-              </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-                Engineered an inventory management web application in Vue.js for tracking component and tooling movement inside the Monash maker space. Connected to the BOMIST API and interfaced directly with tablet-connected hardware barcode scanners.
-              </p>
-            </div>
-
-            <div class="p-4 glass-subbox rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Deployment:</span>
-                <span class="font-mono text-zinc-900">Workshop Tablet / Local Server</span>
-              </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Integration:</span>
-                <span class="font-mono text-zinc-800">BOMIST API &bull; Barcode Scanner</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
-            <span class="tech-chip">Vue.js</span>
-            <span class="tech-chip">BOMIST API</span>
-            <span class="tech-chip">JavaScript</span>
-            <span class="tech-chip">REST</span>
-          </div>
-        </article>
-
-        <!-- Project 12: Qt6 Telemetry & Datalogging Application (Web / Tooling) -->
-        <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="web">
-          <div class="space-y-5">
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-                Tooling &bull; Relativity Engineering
-              </span>
-              <div class="flex items-center gap-2">
-                <span class="p-2 rounded-xl text-zinc-400">
-                  <i data-lucide="activity" class="w-4 h-4"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="space-y-2.5">
-              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
-                Qt6 Emergency Vehicle Telemetry &amp; Datalogging Suite
-              </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-                Designed, built, and packaged a Qt6 Python frontend datalogging application complementary to ECU firmware. Visualizes real-time CAN bus telemetry, parses sensor packets, and automated signal evaluation against ANCAP vehicle safety criteria.
-              </p>
-            </div>
-
-            <div class="p-4 glass-subbox rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Evaluation criteria:</span>
-                <span class="font-mono text-zinc-900">ANCAP vehicle safety standards</span>
-              </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-                <span>Data pipeline:</span>
-                <span class="font-mono text-zinc-800">Real-time CAN stream &bull; Cloud export</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
-            <span class="tech-chip">Python</span>
-            <span class="tech-chip">Qt6 / PySide</span>
-            <span class="tech-chip">CAN bus</span>
-            <span class="tech-chip">Datalogging</span>
-          </div>
-        </article>
-
+      <!-- Cut off after first 2 projects (Populated dynamically from projects-data.js) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="home-projects-container">
+        <!-- The first 2 projects are populated dynamically by script.js -->
       </div>
+
+      <!-- Dynamic "See X more..." Button -->
+      <div class="text-center pt-4">
+        <a href="projects.html" id="see-more-projects-btn" class="inline-flex items-center gap-3 px-8 py-4 glass-card hover:bg-white/90 text-zinc-900 rounded-3xl font-normal text-sm shadow-sm hover:shadow-md transition-all duration-200 active:scale-[0.98]">
+          <span>See <span id="see-more-projects-count">10</span> more projects</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+
     </section>
 
 
@@ -781,13 +259,13 @@
         <!-- Contact Channels Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           
-          <!-- Direct Email Box -->
-          <a href="mailto:dylangonzalez@protonmail.com" class="p-5 glass-subbox rounded-3xl space-y-2 text-center group hover:border-zinc-300 transition-colors block">
+          <!-- Direct Email Box (Updated to dylcg10@gmail.com) -->
+          <a href="mailto:dylcg10@gmail.com" class="p-5 glass-subbox rounded-3xl space-y-2 text-center group hover:border-zinc-300 transition-colors block">
             <div class="w-10 h-10 mx-auto rounded-2xl bg-white/70 border border-zinc-200/80 flex items-center justify-center text-zinc-700 group-hover:scale-105 transition-transform">
               <i data-lucide="mail" class="w-5 h-5"></i>
             </div>
             <p class="text-xs text-zinc-500 font-normal">Direct Email</p>
-            <p class="text-xs font-mono font-normal text-zinc-900 truncate">dylangonzalez@protonmail.com</p>
+            <p class="text-xs font-mono font-normal text-zinc-900 truncate">dylcg10@gmail.com</p>
           </a>
 
           <!-- LinkedIn Profile -->
@@ -799,13 +277,13 @@
             <p class="text-xs font-mono font-normal text-zinc-900">in/dylan-gonzalez-10</p>
           </a>
 
-          <!-- GitHub Profile -->
-          <a href="https://github.com/dylcg" target="_blank" rel="noopener noreferrer" class="p-5 glass-subbox rounded-3xl space-y-2 text-center group hover:border-zinc-300 transition-colors block">
+          <!-- GitHub Profile (Updated to github.com/dylan-gonzalez) -->
+          <a href="https://github.com/dylan-gonzalez" target="_blank" rel="noopener noreferrer" class="p-5 glass-subbox rounded-3xl space-y-2 text-center group hover:border-zinc-300 transition-colors block">
             <div class="w-10 h-10 mx-auto rounded-2xl bg-white/70 border border-zinc-200/80 flex items-center justify-center text-zinc-700 group-hover:scale-105 transition-transform">
               <i data-lucide="github" class="w-5 h-5"></i>
             </div>
             <p class="text-xs text-zinc-500 font-normal">Code &amp; Repositories</p>
-            <p class="text-xs font-mono font-normal text-zinc-900">github.com/dylcg</p>
+            <p class="text-xs font-mono font-normal text-zinc-900">github.com/dylan-gonzalez</p>
           </a>
 
         </div>
@@ -876,7 +354,7 @@
 
       <div class="flex items-center gap-6 font-normal">
         <a href="#home" class="hover:text-zinc-900 transition-colors">Home</a>
-        <a href="#projects" class="hover:text-zinc-900 transition-colors">Projects</a>
+        <a href="projects.html" class="hover:text-zinc-900 transition-colors">Projects</a>
         <a href="#contact" class="hover:text-zinc-900 transition-colors">Contact</a>
         <a href="#home" class="p-1.5 rounded-xl hover:bg-zinc-100/60 text-zinc-600 hover:text-zinc-900 transition-colors" title="Back to top">
           <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
@@ -894,10 +372,11 @@
     </div>
   </div>
 
+  <script src="projects-data.js"></script>
   <script src="script.js"></script>
   <script>
     // Initialize Lucide icons
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
   </script>
 </body>
 </html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects | Dylan Gonzalez — Software Engineer</title>
+  <meta name="description" content="Technical projects by Dylan Gonzalez across robotics, industrial automation, embedded systems, and web applications.">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Helvetica Neue"', 'Helvetica', 'Arial', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"SF Mono"', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+          },
+          borderRadius: {
+            '2xl': '1rem',
+            '3xl': '1.5rem',
+            '4xl': '2rem',
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-b from-white via-zinc-100 to-zinc-200 text-zinc-900 min-h-screen antialiased selection:bg-zinc-800 selection:text-white font-normal">
+
+  <!-- Ambient Glow Effects -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[780px] h-[440px] bg-gradient-to-br from-zinc-200/60 via-zinc-300/40 to-transparent blur-3xl rounded-full"></div>
+    <div class="absolute top-[40%] -right-40 w-[500px] h-[500px] bg-zinc-200/50 blur-3xl rounded-full"></div>
+    <div class="absolute bottom-10 -left-40 w-[500px] h-[500px] bg-zinc-300/40 blur-3xl rounded-full"></div>
+  </div>
+
+  <!-- Centered Top Navbar -->
+  <header class="fixed top-6 inset-x-0 z-50 flex justify-center px-4">
+    <nav class="glass-pill rounded-2xl px-3 py-2 flex items-center justify-between gap-6 sm:gap-8 transition-all duration-300 hover:border-zinc-300/80">
+      
+      <!-- Brand Logo / Badge -->
+      <a href="index.html#home" class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-zinc-100/60 transition-colors group">
+        <div class="w-7 h-7 rounded-xl bg-zinc-900 text-white flex items-center justify-center font-normal text-xs tracking-tight shadow-sm group-hover:scale-105 transition-transform">
+          DG
+        </div>
+        <span class="font-normal text-sm tracking-tight text-zinc-900 hidden sm:inline-block">Dylan Gonzalez</span>
+      </a>
+
+      <!-- Navigation Links -->
+      <div class="flex items-center gap-1.5">
+        <a href="index.html#home" class="nav-link px-4 py-1.5 text-xs sm:text-sm font-normal rounded-xl text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/60 transition-all duration-200">
+          Home
+        </a>
+        <a href="projects.html" class="nav-link active px-4 py-1.5 text-xs sm:text-sm font-normal rounded-xl text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/60 transition-all duration-200">
+          Projects
+        </a>
+        <a href="index.html#contact" class="nav-link px-4 py-1.5 text-xs sm:text-sm font-normal rounded-xl text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/60 transition-all duration-200">
+          Contact
+        </a>
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="relative z-10 max-w-5xl mx-auto px-6 sm:px-8 pt-40 pb-32 space-y-16">
+
+    <!-- Header Section -->
+    <div class="space-y-6 pt-4">
+      <a href="index.html" class="inline-flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-900 transition-colors">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+        <span>Back to Home</span>
+      </a>
+
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-zinc-200/80 pb-8">
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 glass-subbox rounded-xl text-xs font-normal text-zinc-700">
+            <i data-lucide="folder-git-2" class="w-3.5 h-3.5"></i>
+            <span>All Technical Projects</span>
+          </div>
+          <h1 class="text-3xl sm:text-5xl font-normal text-zinc-900 tracking-tight">Technical Projects</h1>
+          <p class="text-sm sm:text-base text-zinc-500 font-normal max-w-xl">
+            A comprehensive catalog of autonomous robotics, vehicle ECU firmware, industrial automation lines, and software tooling.
+          </p>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="flex flex-wrap items-center gap-1.5 glass-panel p-1.5 rounded-2xl shadow-xs" id="project-filters">
+          <button class="filter-btn active px-3.5 py-1.5 rounded-xl text-xs font-normal transition-all" data-filter="all">All</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-normal text-zinc-600 hover:text-zinc-900 transition-all" data-filter="robotics">Robotics</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-normal text-zinc-600 hover:text-zinc-900 transition-all" data-filter="industrial-automation">Industrial Automation</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-normal text-zinc-600 hover:text-zinc-900 transition-all" data-filter="embedded">Embedded</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-normal text-zinc-600 hover:text-zinc-900 transition-all" data-filter="web">Web</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- All Projects Grid (Populated dynamically from projects-data.js) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="all-projects-container">
+      <!-- Cards rendered by script.js -->
+    </div>
+
+    <!-- Back to top / home card -->
+    <div class="glass-panel rounded-3xl p-8 text-center space-y-4">
+      <h3 class="text-lg font-normal text-zinc-900">Interested in collaborating or discussing technical architecture?</h3>
+      <div class="flex items-center justify-center gap-4">
+        <a href="index.html#contact" class="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white hover:bg-zinc-800 font-normal text-sm rounded-2xl shadow-sm transition-all active:scale-[0.98]">
+          <span>Get in Touch</span>
+          <i data-lucide="mail" class="w-4 h-4"></i>
+        </a>
+        <a href="https://github.com/dylan-gonzalez" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 glass-pill text-zinc-800 hover:bg-white/80 font-normal text-sm rounded-2xl transition-all active:scale-[0.98]">
+          <i data-lucide="github" class="w-4 h-4"></i>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Clean Rounded Footer -->
+  <footer class="relative z-10 max-w-5xl mx-auto px-6 sm:px-8 pb-12">
+    <div class="glass-pill rounded-3xl px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500 font-normal">
+      <div class="flex items-center gap-3">
+        <div class="w-6 h-6 rounded-lg bg-zinc-900 text-white flex items-center justify-center font-normal text-[10px]">
+          DG
+        </div>
+        <span>&copy; <span id="current-year"></span> Dylan Gonzalez. Built with precision and care.</span>
+      </div>
+      <div class="flex items-center gap-6 font-normal">
+        <a href="index.html#home" class="hover:text-zinc-900 transition-colors">Home</a>
+        <a href="projects.html" class="hover:text-zinc-900 transition-colors">Projects</a>
+        <a href="index.html#contact" class="hover:text-zinc-900 transition-colors">Contact</a>
+        <a href="#" class="p-1.5 rounded-xl hover:bg-zinc-100/60 text-zinc-600 hover:text-zinc-900 transition-colors" title="Back to top">
+          <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="projects-data.js"></script>
+  <script src="script.js"></script>
+  <script>
+    if (window.lucide) lucide.createIcons();
+  </script>
+</body>
+</html>
