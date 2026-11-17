@@ -4,6 +4,29 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // 0. Clean URL normalization: strip /index.html and #home so root resolves to /
+  if (
+    window.location.pathname.endsWith('/index.html') ||
+    window.location.hash === '#home'
+  ) {
+    const cleanPath = window.location.pathname.replace(/\/index\.html$/, '/');
+    const cleanHash = window.location.hash === '#home' ? '' : window.location.hash;
+    window.history.replaceState(null, '', cleanPath + cleanHash);
+  }
+
+  // Smooth scroll to top & clean URL when clicking Home / Logo links on home page
+  document.querySelectorAll('a[href="/"], a[href="#home"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      if (window.location.pathname === '/' || window.location.pathname.endsWith('/index.html')) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (window.location.pathname !== '/' || window.location.hash) {
+          window.history.replaceState(null, '', '/');
+        }
+      }
+    });
+  });
+
   // 1. Current Year in Footer
   const yearElements = document.querySelectorAll('#current-year');
   yearElements.forEach(el => {
