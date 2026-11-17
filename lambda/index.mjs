@@ -6,13 +6,16 @@ import {
   DeleteCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
 const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({ region: "ap-southeast-2" }));
 const s3 = new S3Client({ region: "ap-southeast-2" });
+const ses = new SESClient({ region: "ap-southeast-2" });
 
 const TABLE_NAME = process.env.TABLE_NAME || "dylangonzalez-blog-posts";
 const BUCKET_NAME = process.env.BUCKET_NAME || "dylangonzalez-dev-website-bucket";
 const SITE_URL = process.env.SITE_URL || "https://dylangonzalez.dev";
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL || "dylcg10@gmail.com";
 const ADMIN_KEY = process.env.ADMIN_KEY || "";
 
 const corsHeaders = {
@@ -41,6 +44,43 @@ export const handler = async (event) => {
   const isAdmin = Boolean(ADMIN_KEY && providedKey === ADMIN_KEY);
 
   try {
+    // 0. Public Contact Form Endpoint — POST /contact
+    if (path.endsWith("/contact") && method === "POST") {
+      const body = event.body ? JSON.parse(event.body) : {};
+      const name = String(body.name || "").trim();
+      const email = String(body.email || "").trim();
+      const subject = String(body.subject || "Portfolio Inquiry").trim();
+      const message = String(body.message || "").trim();
+
+      if (!name || !email || !message) {
+        return response(400, { error: "Name, email, and message are required." });
+      }
+
+      await ses.send(
+        new SendEmailCommand({
+          Source: CONTACT_EMAIL,
+          Destination: {
+            ToAddresses: [CONTACT_EMAIL],
+          },
+          ReplyToAddresses: [email],
+          Message: {
+            Subject: {
+              Data: `[dylangonzalez.dev] ${subject} — from ${name}`,
+              Charset: "UTF-8",
+            },
+            Body: {
+              Text: {
+                Data: `New message from dylangonzalez.dev contact form:\n\nName: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}\n`,
+                Charset: "UTF-8",
+              },
+            },
+          },
+        })
+      );
+
+      return response(200, { ok: true });
+    }
+
     // 1. Verify Admin Key
     if (path.endsWith("/auth") && method === "POST") {
       if (!isAdmin) return response(401, { error: "Invalid admin key" });

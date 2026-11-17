@@ -517,7 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Simulate sending state
+      // Send via AWS SES Lambda endpoint
       const originalText = submitBtn.innerHTML;
       submitBtn.disabled = true;
       submitBtn.innerHTML = `
@@ -528,13 +528,27 @@ document.addEventListener('DOMContentLoaded', () => {
         <span>Sending...</span>
       `;
 
-      setTimeout(() => {
-        contactForm.reset();
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-        if (window.lucide) window.lucide.createIcons();
-        showToast(`Thanks ${name}! Your message has been sent.`);
-      }, 1000);
+      fetch(`${window.BLOG_API_URL}/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, subject, message })
+      })
+        .then(async (res) => {
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.error || 'Failed to send message');
+          }
+          contactForm.reset();
+          showToast(`Thanks ${name}! Your message has been sent.`);
+        })
+        .catch(() => {
+          showToast('Could not send right now — please email dylcg10@gmail.com directly.', false);
+        })
+        .finally(() => {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+          if (window.lucide) window.lucide.createIcons();
+        });
     });
   }
 
