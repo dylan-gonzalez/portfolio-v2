@@ -10,23 +10,32 @@ Parameters:
     Default: dylangonzalez.dev
     Description: Primary domain name for the portfolio website.
 
+  ExistingHostedZoneId:
+    Type: String
+    Default: ''
+    Description: >
+      (Optional) ID of an existing Route 53 Hosted Zone for DomainName (e.g. Z0123456789ABCDEF).
+      Leave blank to create a new Route 53 Hosted Zone.
+
   AcmCertificateArn:
     Type: String
     Default: ''
     Description: >
-      (Optional) ARN of an existing ACM Certificate in us-east-1.
-      Leave blank if deploying this stack in us-east-1 (the stack will create the certificate automatically).
-      Required if deploying this stack in ap-southeast-2 (Sydney), since CloudFront requires certificates in us-east-1.
+      (Optional) ARN of an existing ISSUED ACM Certificate in us-east-1.
+      Leave blank if deploying this stack in us-east-1 (the stack will create and wait for the certificate automatically).
+      Required if deploying this stack in ap-southeast-2 (Sydney), and the certificate MUST already be in 'Issued' status.
 
 Conditions:
+  CreateHostedZone: !Equals [!Ref ExistingHostedZoneId, '']
   CreateCertificate: !Equals [!Ref AcmCertificateArn, '']
 
 Resources:
   # ---------------------------------------------------------------------------
-  # 1. Route 53 Hosted Zone (Global)
+  # 1. Route 53 Hosted Zone (Global — created only if ExistingHostedZoneId is blank)
   # ---------------------------------------------------------------------------
   HostedZone:
     Type: AWS::Route53::HostedZone
+    Condition: CreateHostedZone
     Properties:
       Name: !Ref DomainName
       HostedZoneConfig:
@@ -45,9 +54,9 @@ Resources:
       ValidationMethod: DNS
       DomainValidationOptions:
         - DomainName: !Ref DomainName
-          HostedZoneId: !Ref HostedZone
+          HostedZoneId: !If [CreateHostedZone, !Ref HostedZone, !Ref ExistingHostedZoneId]
         - DomainName: !Sub 'www.${DomainName}'
-          HostedZoneId: !Ref HostedZone
+          HostedZoneId: !If [CreateHostedZone, !Ref HostedZone, !Ref ExistingHostedZoneId]
 
   # ---------------------------------------------------------------------------
   # 3. S3 Bucket (Private — accessed exclusively via CloudFront OAC)
@@ -142,7 +151,7 @@ Resources:
   DNSRecordApexA:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneId: !Ref HostedZone
+      HostedZoneId: !If [CreateHostedZone, !Ref HostedZone, !Ref ExistingHostedZoneId]
       Name: !Ref DomainName
       Type: A
       AliasTarget:
@@ -154,7 +163,7 @@ Resources:
   DNSRecordApexAAAA:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneId: !Ref HostedZone
+      HostedZoneId: !If [CreateHostedZone, !Ref HostedZone, !Ref ExistingHostedZoneId]
       Name: !Ref DomainName
       Type: AAAA
       AliasTarget:
@@ -165,7 +174,7 @@ Resources:
   DNSRecordWwwA:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneId: !Ref HostedZone
+      HostedZoneId: !If [CreateHostedZone, !Ref HostedZone, !Ref ExistingHostedZoneId]
       Name: !Sub 'www.${DomainName}'
       Type: A
       AliasTarget:
@@ -176,7 +185,7 @@ Resources:
   DNSRecordWwwAAAA:
     Type: AWS::Route53::RecordSet
     Properties:
-      HostedZoneId: !Ref HostedZone
+      HostedZoneId: !If [CreateHostedZone, !Ref HostedZone, !Ref ExistingHostedZoneId]
       Name: !Sub 'www.${DomainName}'
       Type: AAAA
       AliasTarget:
@@ -185,13 +194,9 @@ Resources:
         EvaluateTargetHealth: false
 
 Outputs:
-  Route53NameServers:
-    Description: Copy these 4 NameServers into GoDaddy DNS management for dylangonzalez.dev
-    Value: !Join [', ', !GetAtt HostedZone.NameServers]
-
   HostedZoneId:
     Description: Route 53 Hosted Zone ID
-    Value: !Ref HostedZone
+    Value: !If [CreateHostedZone, !Ref HostedZone, !Ref ExistingHostedZoneId]
 
   S3BucketName:
     Description: S3 Bucket for portfolio static files
