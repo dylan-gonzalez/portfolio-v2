@@ -15,7 +15,8 @@ const ses = new SESClient({ region: "ap-southeast-2" });
 const TABLE_NAME = process.env.TABLE_NAME || "dylangonzalez-blog-posts";
 const BUCKET_NAME = process.env.BUCKET_NAME || "dylangonzalez-dev-website-bucket";
 const SITE_URL = process.env.SITE_URL || "https://dylangonzalez.dev";
-const CONTACT_EMAIL = process.env.CONTACT_EMAIL || "dylcg10@gmail.com";
+const CONTACT_FROM = process.env.CONTACT_FROM || "Dylan Gonzalez Portfolio <contact@dylangonzalez.dev>";
+const CONTACT_TO = process.env.CONTACT_TO || "dylcg10@gmail.com";
 const ADMIN_KEY = process.env.ADMIN_KEY || "";
 
 const corsHeaders = {
@@ -56,27 +57,32 @@ export const handler = async (event) => {
         return response(400, { error: "Name, email, and message are required." });
       }
 
-      await ses.send(
-        new SendEmailCommand({
-          Source: CONTACT_EMAIL,
-          Destination: {
-            ToAddresses: [CONTACT_EMAIL],
+      const buildEmailParams = (sourceAddress) => ({
+        Source: sourceAddress,
+        Destination: {
+          ToAddresses: [CONTACT_TO],
+        },
+        ReplyToAddresses: [email],
+        Message: {
+          Subject: {
+            Data: `[dylangonzalez.dev] ${subject} — from ${name}`,
+            Charset: "UTF-8",
           },
-          ReplyToAddresses: [email],
-          Message: {
-            Subject: {
-              Data: `[dylangonzalez.dev] ${subject} — from ${name}`,
+          Body: {
+            Text: {
+              Data: `New message from dylangonzalez.dev contact form:\n\nName: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}\n`,
               Charset: "UTF-8",
             },
-            Body: {
-              Text: {
-                Data: `New message from dylangonzalez.dev contact form:\n\nName: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}\n`,
-                Charset: "UTF-8",
-              },
-            },
           },
-        })
-      );
+        },
+      });
+
+      try {
+        await ses.send(new SendEmailCommand(buildEmailParams(CONTACT_FROM)));
+      } catch {
+        // Fallback while domain DKIM finishes initial DNS propagation
+        await ses.send(new SendEmailCommand(buildEmailParams(CONTACT_TO)));
+      }
 
       return response(200, { ok: true });
     }
