@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dylan Gonzalez | Software Engineer</title>
   <meta name="description" content="Portfolio of Dylan Gonzalez - Software Engineer specializing in scalable backend systems, clean architecture, and modern web applications.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -15,8 +12,8 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
+            sans: ['"Helvetica Neue"', 'Helvetica', 'Arial', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"SF Mono"', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
           },
           colors: {
             brand: {
@@ -45,7 +42,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gradient-to-b from-white via-zinc-100 to-zinc-200 text-zinc-900 min-h-screen antialiased selection:bg-zinc-800 selection:text-white">
+<body class="bg-gradient-to-b from-white via-zinc-100 to-zinc-200 text-zinc-900 min-h-screen antialiased selection:bg-zinc-800 selection:text-white font-normal">
 
   <!-- Ambient Glow Effects -->
   <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -60,57 +57,39 @@
       
       <!-- Brand Logo / Badge -->
       <a href="#home" class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-zinc-100/80 transition-colors group">
-        <div class="w-7 h-7 rounded-xl bg-zinc-900 text-white flex items-center justify-center font-bold text-xs tracking-tighter shadow-sm group-hover:scale-105 transition-transform">
+        <div class="w-7 h-7 rounded-xl bg-zinc-900 text-white flex items-center justify-center font-normal text-xs tracking-tight shadow-sm group-hover:scale-105 transition-transform">
           DG
         </div>
-        <span class="font-semibold text-sm tracking-tight text-zinc-900 hidden sm:inline-block">Dylan Gonzalez</span>
+        <span class="font-normal text-sm tracking-tight text-zinc-900 hidden sm:inline-block">Dylan Gonzalez</span>
       </a>
 
       <!-- Navigation Links -->
       <div class="flex items-center gap-1.5">
-        <a href="#home" class="nav-link active px-4 py-1.5 text-xs sm:text-sm font-medium rounded-xl text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-all duration-200" data-section="home">
+        <a href="#home" class="nav-link active px-4 py-1.5 text-xs sm:text-sm font-normal rounded-xl text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-all duration-200" data-section="home">
           Home
         </a>
-        <a href="#projects" class="nav-link px-4 py-1.5 text-xs sm:text-sm font-medium rounded-xl text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-all duration-200" data-section="projects">
+        <a href="#projects" class="nav-link px-4 py-1.5 text-xs sm:text-sm font-normal rounded-xl text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-all duration-200" data-section="projects">
           Projects
         </a>
-        <a href="#contact" class="nav-link px-4 py-1.5 text-xs sm:text-sm font-medium rounded-xl text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-all duration-200" data-section="contact">
+        <a href="#contact" class="nav-link px-4 py-1.5 text-xs sm:text-sm font-normal rounded-xl text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-all duration-200" data-section="contact">
           Contact
         </a>
-      </div>
-
-      <!-- Quick Action: Status Pill -->
-      <div class="hidden md:flex items-center gap-2 pl-2 pr-3 py-1 bg-emerald-50/80 border border-emerald-200/70 rounded-xl text-emerald-800 text-xs font-medium">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-        </span>
-        Available for hire
       </div>
 
     </nav>
   </header>
 
   <!-- Main Content Wrapper with lots of whitespace -->
-  <main class="relative z-10 max-w-5xl mx-auto px-6 sm:px-8 pt-36 pb-24 space-y-36 sm:space-y-44">
+  <main class="relative z-10 max-w-5xl mx-auto px-6 sm:px-8 pt-40 pb-28 space-y-40 sm:space-y-48">
 
     <!-- ==================== HOME SECTION ==================== -->
     <section id="home" class="space-y-24 scroll-mt-36">
 
       <!-- Hero Header -->
-      <div class="space-y-8 text-center max-w-3xl mx-auto pt-6">
-        
-        <!-- Status Badge for Mobile & Desktop -->
-        <div class="inline-flex items-center gap-2.5 px-4 py-2 bg-white/90 border border-zinc-200/80 shadow-xs rounded-2xl text-xs font-medium text-zinc-700">
-          <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span>Software Engineer &amp; Systems Builder</span>
-        </div>
+      <div class="space-y-8 text-center max-w-3xl mx-auto pt-8">
 
         <!-- Main Heading -->
-        <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-zinc-900 leading-[1.12]">
+        <h1 class="text-4xl sm:text-6xl font-normal tracking-tight text-zinc-900 leading-[1.15]">
           Crafting resilient systems &amp; clean digital experiences.
         </h1>
 
@@ -120,56 +99,27 @@
         </p>
 
         <!-- CTA Action Buttons -->
-        <div class="flex flex-wrap items-center justify-center gap-4 pt-3">
-          <a href="#projects" class="inline-flex items-center gap-2 px-6 py-3.5 bg-zinc-900 text-white hover:bg-zinc-800 font-medium text-sm rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 active:scale-[0.98]">
+        <div class="flex flex-wrap items-center justify-center gap-4 pt-4">
+          <a href="#projects" class="inline-flex items-center gap-2 px-6 py-3.5 bg-zinc-900 text-white hover:bg-zinc-800 font-normal text-sm rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 active:scale-[0.98]">
             <span>View Projects</span>
             <i data-lucide="arrow-down" class="w-4 h-4"></i>
           </a>
-          <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3.5 bg-white text-zinc-800 hover:bg-zinc-50 border border-zinc-200/90 font-medium text-sm rounded-2xl shadow-xs hover:shadow-sm transition-all duration-200 active:scale-[0.98]">
+          <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3.5 bg-white text-zinc-800 hover:bg-zinc-50 border border-zinc-200/90 font-normal text-sm rounded-2xl shadow-xs hover:shadow-sm transition-all duration-200 active:scale-[0.98]">
             <span>Get in Touch</span>
             <i data-lucide="mail" class="w-4 h-4"></i>
           </a>
-          <button id="copy-email-hero-btn" class="inline-flex items-center gap-2 px-4 py-3.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-medium text-sm rounded-2xl transition-all duration-200 active:scale-[0.98]" title="Copy email address">
-            <i data-lucide="copy" class="w-4 h-4"></i>
-            <span class="hidden sm:inline">Copy Email</span>
-          </button>
-        </div>
-
-      </div>
-
-      <!-- Quick Metrics Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-4">
-        
-        <div class="bg-white/80 backdrop-blur-md border border-zinc-200/80 rounded-3xl p-6 text-center space-y-1 hover:border-zinc-300 hover:shadow-sm transition-all">
-          <p class="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight">5+ yrs</p>
-          <p class="text-xs sm:text-sm text-zinc-500 font-medium">Software Engineering</p>
-        </div>
-
-        <div class="bg-white/80 backdrop-blur-md border border-zinc-200/80 rounded-3xl p-6 text-center space-y-1 hover:border-zinc-300 hover:shadow-sm transition-all">
-          <p class="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight">99.99%</p>
-          <p class="text-xs sm:text-sm text-zinc-500 font-medium">Service Uptime SLA</p>
-        </div>
-
-        <div class="bg-white/80 backdrop-blur-md border border-zinc-200/80 rounded-3xl p-6 text-center space-y-1 hover:border-zinc-300 hover:shadow-sm transition-all">
-          <p class="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight">20M+</p>
-          <p class="text-xs sm:text-sm text-zinc-500 font-medium">Daily API Requests</p>
-        </div>
-
-        <div class="bg-white/80 backdrop-blur-md border border-zinc-200/80 rounded-3xl p-6 text-center space-y-1 hover:border-zinc-300 hover:shadow-sm transition-all">
-          <p class="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight">100%</p>
-          <p class="text-xs sm:text-sm text-zinc-500 font-medium">Clean &amp; Tested Code</p>
         </div>
 
       </div>
 
       <!-- Core Tech Stack & Tools -->
-      <div class="bg-white/85 backdrop-blur-md border border-zinc-200/80 rounded-4xl p-8 sm:p-10 space-y-8 shadow-xs">
+      <div class="bg-white/85 backdrop-blur-md border border-zinc-200/80 rounded-4xl p-8 sm:p-12 space-y-8 shadow-xs">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-100 pb-6">
           <div class="space-y-1">
-            <h2 class="text-xl font-bold text-zinc-900">Technical Arsenal</h2>
-            <p class="text-sm text-zinc-500">Core technologies, frameworks, and infrastructure tools I work with daily</p>
+            <h2 class="text-xl font-normal text-zinc-900">Technical Arsenal</h2>
+            <p class="text-sm text-zinc-500 font-normal">Core technologies, frameworks, and infrastructure tools I work with daily</p>
           </div>
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-zinc-100 rounded-xl text-xs font-mono text-zinc-600 self-start sm:self-auto">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-zinc-100 rounded-xl text-xs font-mono font-normal text-zinc-600 self-start sm:self-auto">
             <i data-lucide="code-2" class="w-3.5 h-3.5"></i>
             production-ready
           </span>
@@ -178,8 +128,8 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
           
           <!-- Category 1: Languages & Core -->
-          <div class="space-y-3.5 p-5 bg-zinc-50/70 border border-zinc-200/60 rounded-3xl">
-            <div class="flex items-center gap-2 text-zinc-800 font-semibold text-sm">
+          <div class="space-y-3.5 p-6 bg-zinc-50/70 border border-zinc-200/60 rounded-3xl">
+            <div class="flex items-center gap-2 text-zinc-800 font-normal text-sm">
               <i data-lucide="terminal" class="w-4 h-4 text-zinc-600"></i>
               <span>Languages</span>
             </div>
@@ -194,8 +144,8 @@
           </div>
 
           <!-- Category 2: Backend & Systems -->
-          <div class="space-y-3.5 p-5 bg-zinc-50/70 border border-zinc-200/60 rounded-3xl">
-            <div class="flex items-center gap-2 text-zinc-800 font-semibold text-sm">
+          <div class="space-y-3.5 p-6 bg-zinc-50/70 border border-zinc-200/60 rounded-3xl">
+            <div class="flex items-center gap-2 text-zinc-800 font-normal text-sm">
               <i data-lucide="database" class="w-4 h-4 text-zinc-600"></i>
               <span>Backend &amp; Data</span>
             </div>
@@ -210,8 +160,8 @@
           </div>
 
           <!-- Category 3: Frontend & Cloud -->
-          <div class="space-y-3.5 p-5 bg-zinc-50/70 border border-zinc-200/60 rounded-3xl">
-            <div class="flex items-center gap-2 text-zinc-800 font-semibold text-sm">
+          <div class="space-y-3.5 p-6 bg-zinc-50/70 border border-zinc-200/60 rounded-3xl">
+            <div class="flex items-center gap-2 text-zinc-800 font-normal text-sm">
               <i data-lucide="cloud" class="w-4 h-4 text-zinc-600"></i>
               <span>Frontend &amp; Cloud</span>
             </div>
@@ -228,48 +178,6 @@
         </div>
       </div>
 
-      <!-- Engineering Principles (Clean Rounded Cards) -->
-      <div class="space-y-8">
-        <div class="text-center space-y-2">
-          <h2 class="text-2xl font-bold text-zinc-900 tracking-tight">Engineering Principles</h2>
-          <p class="text-sm text-zinc-500 max-w-lg mx-auto">The core philosophy that guides every line of code and architectural decision</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
-          <div class="bg-white/80 backdrop-blur-md border border-zinc-200/80 rounded-3xl p-7 space-y-4 hover:border-zinc-300 hover:shadow-md transition-all">
-            <div class="w-12 h-12 rounded-2xl bg-zinc-100 flex items-center justify-center text-zinc-800">
-              <i data-lucide="layers" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-base font-bold text-zinc-900">Modular &amp; Resilient</h3>
-            <p class="text-sm text-zinc-600 leading-relaxed">
-              Prioritizing decoupled components, predictable error boundaries, and observable state so systems fail gracefully and scale effortlessly.
-            </p>
-          </div>
-
-          <div class="bg-white/80 backdrop-blur-md border border-zinc-200/80 rounded-3xl p-7 space-y-4 hover:border-zinc-300 hover:shadow-md transition-all">
-            <div class="w-12 h-12 rounded-2xl bg-zinc-100 flex items-center justify-center text-zinc-800">
-              <i data-lucide="zap" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-base font-bold text-zinc-900">Performance First</h3>
-            <p class="text-sm text-zinc-600 leading-relaxed">
-              Zero-bloat mindset. From database indexing and cache invalidation strategies to minimal bundle sizes and sub-100ms API responses.
-            </p>
-          </div>
-
-          <div class="bg-white/80 backdrop-blur-md border border-zinc-200/80 rounded-3xl p-7 space-y-4 hover:border-zinc-300 hover:shadow-md transition-all">
-            <div class="w-12 h-12 rounded-2xl bg-zinc-100 flex items-center justify-center text-zinc-800">
-              <i data-lucide="sparkles" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-base font-bold text-zinc-900">Clean &amp; Maintainable</h3>
-            <p class="text-sm text-zinc-600 leading-relaxed">
-              Writing self-documenting code with rigorous types, robust test coverage, and documentation that respects the next engineer's time.
-            </p>
-          </div>
-
-        </div>
-      </div>
-
     </section>
 
 
@@ -278,23 +186,23 @@
 
       <!-- Section Header -->
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-zinc-200/80 pb-8">
-        <div class="space-y-3">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1 bg-zinc-100 border border-zinc-200 rounded-xl text-xs font-semibold text-zinc-700">
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 bg-zinc-100 border border-zinc-200 rounded-xl text-xs font-normal text-zinc-700">
             <i data-lucide="folder-git-2" class="w-3.5 h-3.5"></i>
             <span>Featured Work</span>
           </div>
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight">Selected Projects</h2>
-          <p class="text-sm sm:text-base text-zinc-500 max-w-xl">
+          <h2 class="text-3xl sm:text-4xl font-normal text-zinc-900 tracking-tight">Selected Projects</h2>
+          <p class="text-sm sm:text-base text-zinc-500 font-normal max-w-xl">
             A showcase of distributed systems, developer tooling, and modern full-stack web applications.
           </p>
         </div>
 
         <!-- Filter Pills -->
         <div class="flex flex-wrap items-center gap-1.5 bg-white/90 border border-zinc-200/80 p-1.5 rounded-2xl shadow-xs" id="project-filters">
-          <button class="filter-btn active px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all" data-filter="all">All</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-medium text-zinc-600 hover:text-zinc-900 transition-all" data-filter="systems">Systems</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-medium text-zinc-600 hover:text-zinc-900 transition-all" data-filter="fullstack">Full-Stack</button>
-          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-medium text-zinc-600 hover:text-zinc-900 transition-all" data-filter="tooling">Tools</button>
+          <button class="filter-btn active px-3.5 py-1.5 rounded-xl text-xs font-normal transition-all" data-filter="all">All</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-normal text-zinc-600 hover:text-zinc-900 transition-all" data-filter="systems">Systems</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-normal text-zinc-600 hover:text-zinc-900 transition-all" data-filter="fullstack">Full-Stack</button>
+          <button class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-normal text-zinc-600 hover:text-zinc-900 transition-all" data-filter="tooling">Tools</button>
         </div>
       </div>
 
@@ -302,10 +210,10 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="projects-container">
 
         <!-- Project 1: NexusMQ -->
-        <article class="project-card group bg-white/85 backdrop-blur-md border border-zinc-200/80 rounded-4xl p-8 space-y-6 shadow-xs hover:border-zinc-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between" data-category="systems">
+        <article class="project-card group bg-white/85 backdrop-blur-md border border-zinc-200/80 rounded-4xl p-8 sm:p-10 space-y-6 shadow-xs hover:border-zinc-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between" data-category="systems">
           <div class="space-y-5">
             <div class="flex items-center justify-between">
-              <span class="px-3 py-1 bg-zinc-100 border border-zinc-200/70 text-zinc-800 rounded-xl text-xs font-mono font-medium">
+              <span class="px-3 py-1 bg-zinc-100 border border-zinc-200/70 text-zinc-800 rounded-xl text-xs font-mono font-normal">
                 Systems &amp; Distributed
               </span>
               <div class="flex items-center gap-2">
@@ -319,28 +227,28 @@
             </div>
 
             <div class="space-y-2.5">
-              <h3 class="text-xl font-bold text-zinc-900 group-hover:text-zinc-700 transition-colors">
+              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
                 NexusMQ: Distributed Event Log Engine
               </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed">
+              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
                 Lightweight, high-throughput distributed commit log written in Go. Implements Raft consensus for leader election, segmented disk storage, and zero-copy network streaming.
               </p>
             </div>
 
             <!-- Key Feature Highlights -->
             <div class="p-4 bg-zinc-50/80 border border-zinc-200/60 rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600">
-                <span class="font-medium">Throughput benchmark:</span>
-                <span class="font-mono font-bold text-zinc-900">45k msg/sec @ 1.2ms p99</span>
+              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
+                <span>Throughput benchmark:</span>
+                <span class="font-mono text-zinc-900">45k msg/sec @ 1.2ms p99</span>
               </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600">
-                <span class="font-medium">Consensus:</span>
+              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
+                <span>Consensus:</span>
                 <span class="font-mono text-zinc-800">Raft state machine</span>
               </div>
             </div>
           </div>
 
-          <div class="pt-4 border-t border-zinc-100 flex flex-wrap items-center gap-2">
+          <div class="pt-5 border-t border-zinc-100 flex flex-wrap items-center gap-2">
             <span class="tech-chip">Go</span>
             <span class="tech-chip">gRPC</span>
             <span class="tech-chip">Raft</span>
@@ -350,10 +258,10 @@
         </article>
 
         <!-- Project 2: CloudTrace Observability -->
-        <article class="project-card group bg-white/85 backdrop-blur-md border border-zinc-200/80 rounded-4xl p-8 space-y-6 shadow-xs hover:border-zinc-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between" data-category="fullstack">
+        <article class="project-card group bg-white/85 backdrop-blur-md border border-zinc-200/80 rounded-4xl p-8 sm:p-10 space-y-6 shadow-xs hover:border-zinc-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between" data-category="fullstack">
           <div class="space-y-5">
             <div class="flex items-center justify-between">
-              <span class="px-3 py-1 bg-zinc-100 border border-zinc-200/70 text-zinc-800 rounded-xl text-xs font-mono font-medium">
+              <span class="px-3 py-1 bg-zinc-100 border border-zinc-200/70 text-zinc-800 rounded-xl text-xs font-mono font-normal">
                 Full-Stack &amp; Observability
               </span>
               <div class="flex items-center gap-2">
@@ -367,27 +275,27 @@
             </div>
 
             <div class="space-y-2.5">
-              <h3 class="text-xl font-bold text-zinc-900 group-hover:text-zinc-700 transition-colors">
+              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
                 CloudTrace: Real-Time APM &amp; Flamegraphs
               </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed">
+              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
                 Full-stack distributed tracing and latency analyzer. Ingests OpenTelemetry traces, stores aggregates in ClickHouse, and renders interactive waterfall flamegraphs in React.
               </p>
             </div>
 
             <div class="p-4 bg-zinc-50/80 border border-zinc-200/60 rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600">
-                <span class="font-medium">Data processing:</span>
-                <span class="font-mono font-bold text-zinc-900">ClickHouse Columnar Storage</span>
+              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
+                <span>Data processing:</span>
+                <span class="font-mono text-zinc-900">ClickHouse Columnar Storage</span>
               </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600">
-                <span class="font-medium">Visualization:</span>
+              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
+                <span>Visualization:</span>
                 <span class="font-mono text-zinc-800">Canvas Flamegraph Engine</span>
               </div>
             </div>
           </div>
 
-          <div class="pt-4 border-t border-zinc-100 flex flex-wrap items-center gap-2">
+          <div class="pt-5 border-t border-zinc-100 flex flex-wrap items-center gap-2">
             <span class="tech-chip">TypeScript</span>
             <span class="tech-chip">Next.js</span>
             <span class="tech-chip">OpenTelemetry</span>
@@ -397,10 +305,10 @@
         </article>
 
         <!-- Project 3: DevCanvas Architecture Studio -->
-        <article class="project-card group bg-white/85 backdrop-blur-md border border-zinc-200/80 rounded-4xl p-8 space-y-6 shadow-xs hover:border-zinc-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between" data-category="fullstack">
+        <article class="project-card group bg-white/85 backdrop-blur-md border border-zinc-200/80 rounded-4xl p-8 sm:p-10 space-y-6 shadow-xs hover:border-zinc-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between" data-category="fullstack">
           <div class="space-y-5">
             <div class="flex items-center justify-between">
-              <span class="px-3 py-1 bg-zinc-100 border border-zinc-200/70 text-zinc-800 rounded-xl text-xs font-mono font-medium">
+              <span class="px-3 py-1 bg-zinc-100 border border-zinc-200/70 text-zinc-800 rounded-xl text-xs font-mono font-normal">
                 Full-Stack &amp; WebSockets
               </span>
               <div class="flex items-center gap-2">
@@ -414,27 +322,27 @@
             </div>
 
             <div class="space-y-2.5">
-              <h3 class="text-xl font-bold text-zinc-900 group-hover:text-zinc-700 transition-colors">
+              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
                 DevCanvas: Architecture Flow Visualizer
               </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed">
+              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
                 Collaborative infinite canvas for software architects to map microservice topographies, database schemas, and data pipelines with real-time multiplayer editing.
               </p>
             </div>
 
             <div class="p-4 bg-zinc-50/80 border border-zinc-200/60 rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600">
-                <span class="font-medium">Multiplayer sync:</span>
-                <span class="font-mono font-bold text-zinc-900">CRDTs (Yjs) + WebSockets</span>
+              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
+                <span>Multiplayer sync:</span>
+                <span class="font-mono text-zinc-900">CRDTs (Yjs) + WebSockets</span>
               </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600">
-                <span class="font-medium">Export capabilities:</span>
+              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
+                <span>Export capabilities:</span>
                 <span class="font-mono text-zinc-800">Terraform &amp; OpenAPI Spec</span>
               </div>
             </div>
           </div>
 
-          <div class="pt-4 border-t border-zinc-100 flex flex-wrap items-center gap-2">
+          <div class="pt-5 border-t border-zinc-100 flex flex-wrap items-center gap-2">
             <span class="tech-chip">React</span>
             <span class="tech-chip">WebSockets</span>
             <span class="tech-chip">CRDT</span>
@@ -444,10 +352,10 @@
         </article>
 
         <!-- Project 4: ShipForge CLI -->
-        <article class="project-card group bg-white/85 backdrop-blur-md border border-zinc-200/80 rounded-4xl p-8 space-y-6 shadow-xs hover:border-zinc-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between" data-category="tooling">
+        <article class="project-card group bg-white/85 backdrop-blur-md border border-zinc-200/80 rounded-4xl p-8 sm:p-10 space-y-6 shadow-xs hover:border-zinc-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between" data-category="tooling">
           <div class="space-y-5">
             <div class="flex items-center justify-between">
-              <span class="px-3 py-1 bg-zinc-100 border border-zinc-200/70 text-zinc-800 rounded-xl text-xs font-mono font-medium">
+              <span class="px-3 py-1 bg-zinc-100 border border-zinc-200/70 text-zinc-800 rounded-xl text-xs font-mono font-normal">
                 Developer Tooling
               </span>
               <div class="flex items-center gap-2">
@@ -461,27 +369,27 @@
             </div>
 
             <div class="space-y-2.5">
-              <h3 class="text-xl font-bold text-zinc-900 group-hover:text-zinc-700 transition-colors">
+              <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
                 ShipForge: Multi-Cloud Release Engine
               </h3>
-              <p class="text-sm text-zinc-600 leading-relaxed">
+              <p class="text-sm text-zinc-600 leading-relaxed font-normal">
                 A fast terminal utility that turns any Git repository into ephemeral staging environments on ECS or Kubernetes with automated preview URLs and database branching.
               </p>
             </div>
 
             <div class="p-4 bg-zinc-50/80 border border-zinc-200/60 rounded-2xl space-y-2">
-              <div class="flex items-center justify-between text-xs text-zinc-600">
-                <span class="font-medium">Binary execution:</span>
-                <span class="font-mono font-bold text-zinc-900">Native Rust binary (<10ms)</span>
+              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
+                <span>Binary execution:</span>
+                <span class="font-mono text-zinc-900">Native Rust binary (<10ms)</span>
               </div>
-              <div class="flex items-center justify-between text-xs text-zinc-600">
-                <span class="font-medium">Integration:</span>
+              <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
+                <span>Integration:</span>
                 <span class="font-mono text-zinc-800">GitHub Actions &amp; Webhooks</span>
               </div>
             </div>
           </div>
 
-          <div class="pt-4 border-t border-zinc-100 flex flex-wrap items-center gap-2">
+          <div class="pt-5 border-t border-zinc-100 flex flex-wrap items-center gap-2">
             <span class="tech-chip">Rust</span>
             <span class="tech-chip">Docker</span>
             <span class="tech-chip">AWS ECS</span>
@@ -498,13 +406,13 @@
     <section id="contact" class="space-y-16 scroll-mt-36">
 
       <!-- Section Header -->
-      <div class="text-center space-y-4 max-w-xl mx-auto">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1 bg-zinc-100 border border-zinc-200 rounded-xl text-xs font-semibold text-zinc-700">
+      <div class="text-center space-y-3 max-w-xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 bg-zinc-100 border border-zinc-200 rounded-xl text-xs font-normal text-zinc-700">
           <i data-lucide="send" class="w-3.5 h-3.5"></i>
           <span>Let's Connect</span>
         </div>
-        <h2 class="text-3xl sm:text-5xl font-extrabold text-zinc-900 tracking-tight">Get In Touch</h2>
-        <p class="text-sm sm:text-base text-zinc-600 leading-relaxed">
+        <h2 class="text-3xl sm:text-5xl font-normal text-zinc-900 tracking-tight">Get In Touch</h2>
+        <p class="text-sm sm:text-base text-zinc-600 leading-relaxed font-normal">
           Whether you have a technical question, an open engineering role, or a project in mind, I'd love to chat.
         </p>
       </div>
@@ -513,43 +421,25 @@
       <div class="bg-white/90 backdrop-blur-xl border border-zinc-200/80 rounded-4xl p-8 sm:p-12 shadow-sm max-w-3xl mx-auto space-y-10">
 
         <!-- Contact Channels Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           
           <!-- Direct Email Box -->
-          <div class="p-5 bg-zinc-50 border border-zinc-200/70 rounded-3xl space-y-2 text-center group hover:border-zinc-300 transition-colors">
+          <a href="mailto:dylcg10@gmail.com" class="p-6 bg-zinc-50 border border-zinc-200/70 rounded-3xl space-y-2 text-center group hover:border-zinc-300 transition-colors block">
             <div class="w-10 h-10 mx-auto rounded-2xl bg-white border border-zinc-200/80 flex items-center justify-center text-zinc-700 group-hover:scale-105 transition-transform">
               <i data-lucide="mail" class="w-5 h-5"></i>
             </div>
-            <p class="text-xs text-zinc-500 font-medium">Direct Email</p>
-            <p class="text-xs font-mono font-semibold text-zinc-900 truncate">dylcg10@gmail.com</p>
-            <button id="copy-email-card-btn" class="text-xs text-zinc-600 hover:text-zinc-900 font-medium underline underline-offset-4 pt-1 inline-block">
-              Copy Address
-            </button>
-          </div>
+            <p class="text-xs text-zinc-500 font-normal">Direct Email</p>
+            <p class="text-sm font-mono font-normal text-zinc-900 truncate">dylcg10@gmail.com</p>
+          </a>
 
           <!-- GitHub Profile -->
-          <a href="https://github.com/dylcg" target="_blank" rel="noopener noreferrer" class="p-5 bg-zinc-50 border border-zinc-200/70 rounded-3xl space-y-2 text-center group hover:border-zinc-300 transition-colors block">
+          <a href="https://github.com/dylcg" target="_blank" rel="noopener noreferrer" class="p-6 bg-zinc-50 border border-zinc-200/70 rounded-3xl space-y-2 text-center group hover:border-zinc-300 transition-colors block">
             <div class="w-10 h-10 mx-auto rounded-2xl bg-white border border-zinc-200/80 flex items-center justify-center text-zinc-700 group-hover:scale-105 transition-transform">
               <i data-lucide="github" class="w-5 h-5"></i>
             </div>
-            <p class="text-xs text-zinc-500 font-medium">Code &amp; Repos</p>
-            <p class="text-xs font-mono font-semibold text-zinc-900">github.com/dylcg</p>
-            <span class="text-xs text-zinc-600 group-hover:text-zinc-900 font-medium underline underline-offset-4 pt-1 inline-block">
-              Open Profile &rarr;
-            </span>
+            <p class="text-xs text-zinc-500 font-normal">Code &amp; Repositories</p>
+            <p class="text-sm font-mono font-normal text-zinc-900">github.com/dylcg</p>
           </a>
-
-          <!-- Location & Availability -->
-          <div class="p-5 bg-zinc-50 border border-zinc-200/70 rounded-3xl space-y-2 text-center group hover:border-zinc-300 transition-colors">
-            <div class="w-10 h-10 mx-auto rounded-2xl bg-white border border-zinc-200/80 flex items-center justify-center text-zinc-700 group-hover:scale-105 transition-transform">
-              <i data-lucide="map-pin" class="w-5 h-5"></i>
-            </div>
-            <p class="text-xs text-zinc-500 font-medium">Location</p>
-            <p class="text-xs font-semibold text-zinc-900">Remote / Global</p>
-            <span class="text-xs text-emerald-600 font-medium pt-1 inline-block">
-              Available Immediately
-            </span>
-          </div>
 
         </div>
 
@@ -558,30 +448,30 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             
             <div class="space-y-2">
-              <label for="name" class="block text-xs font-semibold text-zinc-700 tracking-wide uppercase">Your Name</label>
-              <input type="text" id="name" required placeholder="Alex Rivera" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200/90 rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all">
+              <label for="name" class="block text-xs font-normal text-zinc-600 tracking-wide uppercase">Your Name</label>
+              <input type="text" id="name" required placeholder="Alex Rivera" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200/90 rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all font-normal">
             </div>
 
             <div class="space-y-2">
-              <label for="email" class="block text-xs font-semibold text-zinc-700 tracking-wide uppercase">Your Email</label>
-              <input type="email" id="email" required placeholder="alex@company.com" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200/90 rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all">
+              <label for="email" class="block text-xs font-normal text-zinc-600 tracking-wide uppercase">Your Email</label>
+              <input type="email" id="email" required placeholder="alex@company.com" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200/90 rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all font-normal">
             </div>
 
           </div>
 
           <div class="space-y-2">
-            <label for="subject" class="block text-xs font-semibold text-zinc-700 tracking-wide uppercase">Subject</label>
-            <input type="text" id="subject" required placeholder="Engineering role inquiry / Project collaboration" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200/90 rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all">
+            <label for="subject" class="block text-xs font-normal text-zinc-600 tracking-wide uppercase">Subject</label>
+            <input type="text" id="subject" required placeholder="Engineering role inquiry / Project collaboration" class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200/90 rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all font-normal">
           </div>
 
           <div class="space-y-2">
-            <label for="message" class="block text-xs font-semibold text-zinc-700 tracking-wide uppercase">Message</label>
-            <textarea id="message" rows="5" required placeholder="Tell me about what you're building, timelines, or role details..." class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200/90 rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all resize-none"></textarea>
+            <label for="message" class="block text-xs font-normal text-zinc-600 tracking-wide uppercase">Message</label>
+            <textarea id="message" rows="5" required placeholder="Tell me about what you're building, timelines, or role details..." class="w-full px-4 py-3 bg-zinc-50 border border-zinc-200/90 rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900 transition-all resize-none font-normal"></textarea>
           </div>
 
           <div class="flex items-center justify-between pt-2">
-            <p class="text-xs text-zinc-400 hidden sm:block">Usually responds within 24 hours.</p>
-            <button type="submit" id="submit-btn" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-zinc-900 text-white hover:bg-zinc-800 font-medium text-sm rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 active:scale-[0.98]">
+            <p class="text-xs text-zinc-400 hidden sm:block font-normal">Usually responds within 24 hours.</p>
+            <button type="submit" id="submit-btn" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-zinc-900 text-white hover:bg-zinc-800 font-normal text-sm rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 active:scale-[0.98]">
               <span>Send Message</span>
               <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </button>
@@ -596,16 +486,16 @@
 
   <!-- Clean Rounded Footer -->
   <footer class="relative z-10 max-w-5xl mx-auto px-6 sm:px-8 pb-12">
-    <div class="bg-white/70 backdrop-blur-md border border-zinc-200/70 rounded-3xl px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+    <div class="bg-white/70 backdrop-blur-md border border-zinc-200/70 rounded-3xl px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500 font-normal">
       
       <div class="flex items-center gap-3">
-        <div class="w-6 h-6 rounded-lg bg-zinc-900 text-white flex items-center justify-center font-bold text-[10px]">
+        <div class="w-6 h-6 rounded-lg bg-zinc-900 text-white flex items-center justify-center font-normal text-[10px]">
           DG
         </div>
         <span>&copy; <span id="current-year"></span> Dylan Gonzalez. Built with precision and care.</span>
       </div>
 
-      <div class="flex items-center gap-6">
+      <div class="flex items-center gap-6 font-normal">
         <a href="#home" class="hover:text-zinc-900 transition-colors">Home</a>
         <a href="#projects" class="hover:text-zinc-900 transition-colors">Projects</a>
         <a href="#contact" class="hover:text-zinc-900 transition-colors">Contact</a>
@@ -619,9 +509,9 @@
 
   <!-- Toast Notification Container -->
   <div id="toast" class="fixed bottom-8 right-8 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
-    <div class="bg-zinc-900 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 text-sm font-medium border border-zinc-800">
+    <div class="bg-zinc-900 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 text-sm font-normal border border-zinc-800">
       <i id="toast-icon" data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
-      <span id="toast-msg">Email copied to clipboard!</span>
+      <span id="toast-msg">Message sent!</span>
     </div>
   </div>
 
