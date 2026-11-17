@@ -126,3 +126,47 @@ h1, h2, h3, h4, h5, h6, b, strong, th, button, input, textarea, select {
 ::-webkit-scrollbar-thumb:hover {
   background: #a1a1aa;
 }
+
+/* Mouse Blue Gradient Trail Light Effect */
+.cursor-trail-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.cursor-spotlight {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(59, 130, 246, 0.22) 0%,
+    rgba(14, 165, 233, 0.14) 35%,
+    rgba(99, 102, 241, 0.06) 60%,
+    rgba(255, 255, 255, 0) 75%
+  );
+  filter: blur(28px);
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform, opacity;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.cursor-trail-dot {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(56, 189, 248, 0.55) 0%,
+    rgba(59, 130, 246, 0.35) 45%,
+    rgba(37, 99, 235, 0) 100%
+  );
+  filter: blur(8px);
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform, opacity;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}

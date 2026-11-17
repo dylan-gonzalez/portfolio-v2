@@ -220,4 +220,85 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 1000);
     });
   }
+
+  // 10. Mouse Blue Gradient Trail Light Effect
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const trailLayer = document.createElement('div');
+    trailLayer.className = 'cursor-trail-layer';
+    document.body.appendChild(trailLayer);
+
+    const spotlight = document.createElement('div');
+    spotlight.className = 'cursor-spotlight';
+    trailLayer.appendChild(spotlight);
+
+    const numDots = 12;
+    const dots = [];
+    for (let i = 0; i < numDots; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'cursor-trail-dot';
+      const size = Math.max(18, 72 - i * 4.5);
+      dot.style.width = `${size}px`;
+      dot.style.height = `${size}px`;
+      trailLayer.appendChild(dot);
+      dots.push({
+        el: dot,
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        scale: 1 - i / (numDots * 1.15)
+      });
+    }
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let spotX = mouseX;
+    let spotY = mouseY;
+    let hasMoved = false;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!hasMoved) {
+        hasMoved = true;
+        spotX = mouseX;
+        spotY = mouseY;
+        dots.forEach(d => {
+          d.x = mouseX;
+          d.y = mouseY;
+          d.el.style.opacity = String(d.scale * 0.75);
+        });
+        spotlight.style.opacity = '1';
+      }
+    }, { passive: true });
+
+    document.addEventListener('mouseleave', () => {
+      spotlight.style.opacity = '0';
+      dots.forEach(d => {
+        d.el.style.opacity = '0';
+      });
+      hasMoved = false;
+    });
+
+    const animateTrail = () => {
+      // Smooth spring interpolation for ambient spotlight
+      spotX += (mouseX - spotX) * 0.14;
+      spotY += (mouseY - spotY) * 0.14;
+      spotlight.style.transform = `translate3d(${spotX}px, ${spotY}px, 0) translate3d(-50%, -50%, 0)`;
+
+      // Chained spring interpolation for trailing blue light nodes
+      let prevX = mouseX;
+      let prevY = mouseY;
+      dots.forEach((dot, idx) => {
+        const ease = Math.max(0.18, 0.42 - idx * 0.018);
+        dot.x += (prevX - dot.x) * ease;
+        dot.y += (prevY - dot.y) * ease;
+        dot.el.style.transform = `translate3d(${dot.x}px, ${dot.y}px, 0) translate3d(-50%, -50%, 0)`;
+        prevX = dot.x;
+        prevY = dot.y;
+      });
+
+      requestAnimationFrame(animateTrail);
+    };
+
+    requestAnimationFrame(animateTrail);
+  }
 });
