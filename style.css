@@ -138,17 +138,17 @@ h1, h2, h3, h4, h5, h6, b, strong, th, button, input, textarea, select {
 
 .cursor-spotlight {
   position: absolute;
-  width: 480px;
-  height: 480px;
+  width: 90px;
+  height: 90px;
   border-radius: 9999px;
   background: radial-gradient(
     circle,
-    rgba(59, 130, 246, 0.22) 0%,
-    rgba(14, 165, 233, 0.14) 35%,
-    rgba(99, 102, 241, 0.06) 60%,
-    rgba(255, 255, 255, 0) 75%
+    rgba(59, 130, 246, 0.28) 0%,
+    rgba(14, 165, 233, 0.16) 40%,
+    rgba(99, 102, 241, 0.06) 65%,
+    rgba(255, 255, 255, 0) 80%
   );
-  filter: blur(28px);
+  filter: blur(10px);
   transform: translate3d(-50%, -50%, 0);
   will-change: transform, opacity;
   opacity: 0;
@@ -160,11 +160,11 @@ h1, h2, h3, h4, h5, h6, b, strong, th, button, input, textarea, select {
   border-radius: 9999px;
   background: radial-gradient(
     circle,
-    rgba(56, 189, 248, 0.55) 0%,
-    rgba(59, 130, 246, 0.35) 45%,
+    rgba(56, 189, 248, 0.65) 0%,
+    rgba(59, 130, 246, 0.4) 45%,
     rgba(37, 99, 235, 0) 100%
   );
-  filter: blur(8px);
+  filter: blur(3px);
   transform: translate3d(-50%, -50%, 0);
   will-change: transform, opacity;
   opacity: 0;

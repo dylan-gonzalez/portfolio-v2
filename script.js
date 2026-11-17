@@ -231,12 +231,12 @@ document.addEventListener('DOMContentLoaded', () => {
     spotlight.className = 'cursor-spotlight';
     trailLayer.appendChild(spotlight);
 
-    const numDots = 12;
+    const numDots = 10;
     const dots = [];
     for (let i = 0; i < numDots; i++) {
       const dot = document.createElement('div');
       dot.className = 'cursor-trail-dot';
-      const size = Math.max(18, 72 - i * 4.5);
+      const size = Math.max(4, 16 - i * 1.2);
       dot.style.width = `${size}px`;
       dot.style.height = `${size}px`;
       trailLayer.appendChild(dot);
