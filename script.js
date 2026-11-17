@@ -114,20 +114,160 @@ document.addEventListener('DOMContentLoaded', () => {
     allProjectsContainer.innerHTML = PROJECTS_DATA.map(createProjectCardHTML).join('');
   }
 
-  // 4b. Helper to create Blog Card HTML
+  // 4b. Medium-style Markdown / Block Content Parser (exposed globally for Admin preview)
+  const escapeHTML = (str) =>
+    String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+  const formatInline = (text) => {
+    return escapeHTML(text)
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  };
+
+  const renderMediumContent = (rawContent) => {
+    if (!rawContent) return '';
+    const text = Array.isArray(rawContent) ? rawContent.join('\n\n') : String(rawContent);
+    const lines = text.replace(/\r\n/g, '\n').split('\n');
+
+    let html = '';
+    let inCodeBlock = false;
+    let codeBuffer = [];
+    let inUl = false;
+    let inOl = false;
+
+    const closeLists = () => {
+      if (inUl) { html += '</ul>'; inUl = false; }
+      if (inOl) { html += '</ol>'; inOl = false; }
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const trimmed = line.trim();
+
+      // Code block toggle
+      if (trimmed.startsWith('```')) {
+        closeLists();
+        if (!inCodeBlock) {
+          inCodeBlock = true;
+          codeBuffer = [];
+        } else {
+          html += `<pre><code>${escapeHTML(codeBuffer.join('\n'))}</code></pre>`;
+          inCodeBlock = false;
+        }
+        continue;
+      }
+
+      if (inCodeBlock) {
+        codeBuffer.push(line);
+        continue;
+      }
+
+      if (!trimmed) {
+        closeLists();
+        continue;
+      }
+
+      // Horizontal Rule
+      if (trimmed === '---' || trimmed === '***') {
+        closeLists();
+        html += '<hr>';
+        continue;
+      }
+
+      // Image with optional caption: ![Caption](url)
+      const imgMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+      if (imgMatch) {
+        closeLists();
+        const caption = escapeHTML(imgMatch[1]);
+        const url = imgMatch[2].trim();
+        html += `
+          <figure>
+            <img src="${url}" alt="${caption}" loading="lazy">
+            ${caption ? `<figcaption>${caption}</figcaption>` : ''}
+          </figure>
+        `;
+        continue;
+      }
+
+      // Headings
+      if (trimmed.startsWith('### ')) {
+        closeLists();
+        html += `<h3>${formatInline(trimmed.slice(4))}</h3>`;
+        continue;
+      }
+      if (trimmed.startsWith('## ')) {
+        closeLists();
+        html += `<h2>${formatInline(trimmed.slice(3))}</h2>`;
+        continue;
+      }
+      if (trimmed.startsWith('# ')) {
+        closeLists();
+        html += `<h1>${formatInline(trimmed.slice(2))}</h1>`;
+        continue;
+      }
+
+      // Blockquote
+      if (trimmed.startsWith('> ')) {
+        closeLists();
+        html += `<blockquote>${formatInline(trimmed.slice(2))}</blockquote>`;
+        continue;
+      }
+
+      // Unordered List
+      if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+        if (inOl) { html += '</ol>'; inOl = false; }
+        if (!inUl) { html += '<ul>'; inUl = true; }
+        html += `<li>${formatInline(trimmed.slice(2))}</li>`;
+        continue;
+      }
+
+      // Ordered List
+      const olMatch = trimmed.match(/^\d+\.\s+(.*)$/);
+      if (olMatch) {
+        if (inUl) { html += '</ul>'; inUl = false; }
+        if (!inOl) { html += '<ol>'; inOl = true; }
+        html += `<li>${formatInline(olMatch[1])}</li>`;
+        continue;
+      }
+
+      // Paragraph
+      closeLists();
+      html += `<p>${formatInline(trimmed)}</p>`;
+    }
+
+    closeLists();
+    if (inCodeBlock && codeBuffer.length > 0) {
+      html += `<pre><code>${escapeHTML(codeBuffer.join('\n'))}</code></pre>`;
+    }
+
+    return `<div class="medium-article">${html}</div>`;
+  };
+
+  window.renderMediumContent = renderMediumContent;
+
+  // 4c. Helper to create Blog Card HTML
   const createBlogCardHTML = (post) => {
     const tagsHTML = (post.tags || []).map(tag => `<span class="tech-chip">${tag}</span>`).join(' ');
+    const coverHTML = post.coverImage
+      ? `<a href="blog.html#${post.id}" class="block overflow-hidden rounded-3xl aspect-[16/9] mb-2 border border-white/70">
+           <img src="${post.coverImage}" alt="${escapeHTML(post.title)}" class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500" loading="lazy">
+         </a>`
+      : '';
     return `
       <article class="blog-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between">
         <div class="space-y-5">
+          ${coverHTML}
           <div class="flex items-center justify-between text-xs text-zinc-500 font-normal">
             <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl font-mono font-normal">
-              ${post.category}
+              ${post.category || 'General'}
             </span>
             <div class="flex items-center gap-3 font-mono">
-              <span>${post.date}</span>
+              <span>${post.date || ''}</span>
               <span>&bull;</span>
-              <span>${post.readTime}</span>
+              <span>${post.readTime || '2 min read'}</span>
             </div>
           </div>
 
@@ -138,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
               </a>
             </h3>
             <p class="text-sm text-zinc-600 leading-relaxed font-normal">
-              ${post.excerpt}
+              ${post.excerpt || ''}
             </p>
           </div>
         </div>
@@ -156,26 +296,10 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   };
 
-  // 4c. Render Latest 2 Blog Posts on Home Page
+  // 4d. Render Blog Posts & Full Article Reader
   const homeBlogContainer = document.getElementById('home-blog-container');
   const seeMoreBlogWrapper = document.getElementById('see-more-blog-wrapper');
   const seeMoreBlogBtn = document.getElementById('see-more-blog-btn');
-
-  if (homeBlogContainer && typeof BLOG_DATA !== 'undefined') {
-    const firstTwoPosts = BLOG_DATA.slice(0, 2);
-    homeBlogContainer.innerHTML = firstTwoPosts.map(createBlogCardHTML).join('');
-
-    const remainingPosts = Math.max(0, BLOG_DATA.length - 2);
-    if (seeMoreBlogWrapper && seeMoreBlogBtn && remainingPosts > 0) {
-      seeMoreBlogWrapper.classList.remove('hidden');
-      seeMoreBlogBtn.innerHTML = `
-        <span>See ${remainingPosts} more ${remainingPosts === 1 ? 'post' : 'posts'}</span>
-        <i data-lucide="arrow-right" class="w-4 h-4"></i>
-      `;
-    }
-  }
-
-  // 4d. Render All Blog Posts & Full Article Reader on blog.html
   const allBlogContainer = document.getElementById('all-blog-container');
   const blogListView = document.getElementById('blog-list-view');
   const blogArticleView = document.getElementById('blog-article-view');
@@ -189,27 +313,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (post) {
       const tagsHTML = (post.tags || []).map(tag => `<span class="tech-chip">${tag}</span>`).join(' ');
-      const bodyHTML = (post.content || []).map(block => {
-        if (block.trim().startsWith('<')) return block;
-        return `<p class="text-sm sm:text-base text-zinc-700 leading-relaxed font-normal">${block}</p>`;
-      }).join('');
+      const coverHTML = post.coverImage
+        ? `<div class="overflow-hidden rounded-3xl border border-white/80 shadow-sm">
+             <img src="${post.coverImage}" alt="${escapeHTML(post.title)}" class="w-full max-h-[440px] object-cover">
+           </div>`
+        : '';
 
       blogArticleContent.innerHTML = `
-        <header class="space-y-4 border-b border-zinc-200/70 pb-8">
+        <header class="space-y-5 border-b border-zinc-200/70 pb-8">
           <div class="flex flex-wrap items-center gap-3 text-xs text-zinc-500 font-mono font-normal">
-            <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl">${post.category}</span>
-            <span>${post.date}</span>
+            <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl">${post.category || 'General'}</span>
+            <span>${post.date || ''}</span>
             <span>&bull;</span>
-            <span>${post.readTime}</span>
+            <span>${post.readTime || '2 min read'}</span>
           </div>
           <h1 class="text-2xl sm:text-4xl font-normal text-zinc-900 tracking-tight leading-tight">
             ${post.title}
           </h1>
+          ${post.excerpt ? `<p class="text-base sm:text-lg text-zinc-500 leading-relaxed font-normal">${post.excerpt}</p>` : ''}
         </header>
 
-        <div class="space-y-5">
-          ${bodyHTML}
-        </div>
+        ${coverHTML}
+
+        ${renderMediumContent(post.content)}
 
         <footer class="pt-6 border-t border-zinc-200/60 flex flex-wrap items-center justify-between gap-4">
           <div class="flex flex-wrap items-center gap-2">
@@ -228,17 +354,58 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  if (allBlogContainer && typeof BLOG_DATA !== 'undefined') {
-    allBlogContainer.innerHTML = BLOG_DATA.map(createBlogCardHTML).join('');
-    renderBlogReader();
-    window.addEventListener('hashchange', renderBlogReader);
+  const renderAllBlogViews = () => {
+    if (homeBlogContainer && typeof BLOG_DATA !== 'undefined') {
+      const firstTwoPosts = BLOG_DATA.slice(0, 2);
+      homeBlogContainer.innerHTML = firstTwoPosts.map(createBlogCardHTML).join('');
 
+      const remainingPosts = Math.max(0, BLOG_DATA.length - 2);
+      if (seeMoreBlogWrapper && seeMoreBlogBtn) {
+        if (remainingPosts > 0) {
+          seeMoreBlogWrapper.classList.remove('hidden');
+          seeMoreBlogBtn.innerHTML = `
+            <span>See ${remainingPosts} more ${remainingPosts === 1 ? 'post' : 'posts'}</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          `;
+        } else {
+          seeMoreBlogWrapper.classList.add('hidden');
+        }
+      }
+    }
+
+    if (allBlogContainer && typeof BLOG_DATA !== 'undefined') {
+      allBlogContainer.innerHTML = BLOG_DATA.map(createBlogCardHTML).join('');
+      renderBlogReader();
+    }
+
+    if (window.lucide) window.lucide.createIcons();
+  };
+
+  renderAllBlogViews();
+
+  if (allBlogContainer) {
+    window.addEventListener('hashchange', renderBlogReader);
     if (backToBlogListBtn) {
       backToBlogListBtn.addEventListener('click', () => {
         window.history.pushState(null, '', window.location.pathname);
         renderBlogReader();
       });
     }
+  }
+
+  // Fetch live blog posts from DynamoDB Lambda API
+  if (window.BLOG_API_URL && (homeBlogContainer || allBlogContainer)) {
+    fetch(`${window.BLOG_API_URL}/posts`)
+      .then(res => res.ok ? res.json() : Promise.reject(res))
+      .then(data => {
+        if (Array.isArray(data.posts) && data.posts.length > 0) {
+          BLOG_DATA = data.posts;
+          renderAllBlogViews();
+        }
+      })
+      .catch(() => {
+        // Fallback to local BLOG_DATA silently
+      });
   }
 
   // 5. Re-initialize Lucide icons after dynamic rendering
