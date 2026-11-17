@@ -85,26 +85,37 @@
     <!-- ==================== HOME SECTION ==================== -->
     <section id="home" class="space-y-24 scroll-mt-36">
 
-      <!-- Hero Header -->
-      <div class="space-y-8 text-center max-w-3xl mx-auto pt-4">
+      <!-- Hero Header with Off-Center Small Headshot -->
+      <div class="max-w-3xl mx-auto pt-4 space-y-8">
 
-        <!-- Main Heading -->
-        <h1 class="text-3xl sm:text-5xl md:text-6xl font-normal tracking-tight text-zinc-900 leading-[1.18]">
-          Software engineer with experience in automotive engineering, robotics, industrial automation, and full-stack.
-        </h1>
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8 text-center sm:text-left">
+          
+          <!-- Small Headshot (Off-center, rounded rectangle, glassy border) -->
+          <div class="flex-shrink-0 pt-1">
+            <div class="w-20 h-24 sm:w-24 sm:h-28 rounded-3xl overflow-hidden glass-pill p-1 shadow-xs hover:shadow-md transition-all duration-300">
+              <img src="headshot_white_gradient.jpg" alt="Dylan Gonzalez" class="w-full h-full object-cover object-top rounded-[1.25rem]">
+            </div>
+          </div>
 
-        <!-- Subtitle with generous line height and whitespace -->
-        <p class="text-base sm:text-lg text-zinc-600 leading-relaxed max-w-2xl mx-auto font-normal">
-          Bridging real-time embedded control, robotic systems, and robust web architectures to build dependable physical and digital products.
-        </p>
+          <!-- Hero Text (Smaller font, clean and breathable) -->
+          <div class="space-y-4">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-normal tracking-tight text-zinc-900 leading-[1.25]">
+              Software engineer with experience in automotive engineering, robotics, industrial automation, and full-stack.
+            </h1>
+            <p class="text-sm sm:text-base text-zinc-600 leading-relaxed font-normal">
+              Bridging real-time embedded control, robotic systems, and robust web architectures to build dependable physical and digital products.
+            </p>
+          </div>
+
+        </div>
 
         <!-- CTA Action Buttons -->
-        <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
-          <a href="#projects" class="inline-flex items-center gap-2 px-6 py-3.5 bg-zinc-900 text-white hover:bg-zinc-800 font-normal text-sm rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 active:scale-[0.98]">
+        <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-1 sm:pl-32">
+          <a href="#projects" class="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white hover:bg-zinc-800 font-normal text-sm rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 active:scale-[0.98]">
             <span>View Projects</span>
             <i data-lucide="arrow-down" class="w-4 h-4"></i>
           </a>
-          <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3.5 glass-pill text-zinc-800 hover:bg-white/80 font-normal text-sm rounded-2xl transition-all duration-200 active:scale-[0.98]">
+          <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3 glass-pill text-zinc-800 hover:bg-white/80 font-normal text-sm rounded-2xl transition-all duration-200 active:scale-[0.98]">
             <span>Get in Touch</span>
             <i data-lucide="mail" class="w-4 h-4"></i>
           </a>
