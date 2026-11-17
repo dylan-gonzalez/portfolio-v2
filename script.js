@@ -33,6 +33,55 @@ document.addEventListener('DOMContentLoaded', () => {
     el.textContent = new Date().getFullYear();
   });
 
+  // 1b. Mobile Navigation Drawer Toggle
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  const mobileMenuDrawer = document.getElementById('mobile-menu-drawer');
+  const menuOpenIcon = document.querySelector('.menu-open-icon');
+  const menuCloseIcon = document.querySelector('.menu-close-icon');
+
+  if (mobileMenuToggle && mobileMenuDrawer) {
+    const toggleMenu = (open) => {
+      const isOpen = open !== undefined ? open : mobileMenuDrawer.classList.contains('hidden');
+      if (isOpen) {
+        mobileMenuDrawer.classList.remove('hidden');
+        mobileMenuToggle.setAttribute('aria-expanded', 'true');
+        if (menuOpenIcon) menuOpenIcon.classList.add('hidden');
+        if (menuCloseIcon) menuCloseIcon.classList.remove('hidden');
+      } else {
+        mobileMenuDrawer.classList.add('hidden');
+        mobileMenuToggle.setAttribute('aria-expanded', 'false');
+        if (menuOpenIcon) menuOpenIcon.classList.remove('hidden');
+        if (menuCloseIcon) menuCloseIcon.classList.add('hidden');
+      }
+    };
+
+    mobileMenuToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMenu();
+    });
+
+    // Close on mobile link click
+    mobileMenuDrawer.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        toggleMenu(false);
+      });
+    });
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      if (!mobileMenuDrawer.classList.contains('hidden') && !mobileMenuDrawer.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+        toggleMenu(false);
+      }
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !mobileMenuDrawer.classList.contains('hidden')) {
+        toggleMenu(false);
+      }
+    });
+  }
+
   // 2. Helper to create project card HTML
   const createProjectCardHTML = (project) => {
     const tagsHTML = project.tags.map(tag => `<span class="tech-chip">${tag}</span>`).join(' ');
@@ -49,8 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
       : `<span class="px-2.5 py-1 glass-subbox text-zinc-700 rounded-xl text-xs font-mono font-normal">${project.categoryLabel}</span>`;
 
     return `
-      <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="${project.category}" data-company="${project.company || ''}">
-        <div class="space-y-5">
+      <article class="project-card group glass-card rounded-3xl sm:rounded-4xl p-5 sm:p-8 md:p-10 space-y-5 sm:space-y-6 flex flex-col justify-between" data-category="${project.category}" data-company="${project.company || ''}">
+        <div class="space-y-4 sm:space-y-5">
           <div class="flex items-center justify-between gap-3">
             <div class="flex items-center gap-2 flex-wrap">
               <span class="px-2.5 py-1 glass-subbox text-zinc-500 rounded-xl text-xs font-mono capitalize">
@@ -71,28 +120,28 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
 
-          <div class="space-y-2.5">
-            <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
+          <div class="space-y-2 sm:space-y-2.5">
+            <h3 class="text-lg sm:text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
               ${project.title}
             </h3>
-            <p class="text-sm text-zinc-600 leading-relaxed font-normal">
+            <p class="text-xs sm:text-sm text-zinc-600 leading-relaxed font-normal">
               ${project.description}
             </p>
           </div>
 
-          <div class="p-4 glass-subbox rounded-2xl space-y-2">
-            <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-              <span>${project.metric1Label}</span>
+          <div class="p-3.5 sm:p-4 glass-subbox rounded-2xl space-y-2">
+            <div class="flex flex-col xs:flex-row xs:items-center justify-between gap-1 text-xs text-zinc-600 font-normal">
+              <span class="text-zinc-500">${project.metric1Label}</span>
               <span class="font-mono text-zinc-900">${project.metric1Value}</span>
             </div>
-            <div class="flex items-center justify-between text-xs text-zinc-600 font-normal">
-              <span>${project.metric2Label}</span>
+            <div class="flex flex-col xs:flex-row xs:items-center justify-between gap-1 text-xs text-zinc-600 font-normal">
+              <span class="text-zinc-500">${project.metric2Label}</span>
               <span class="font-mono text-zinc-800">${project.metric2Value}</span>
             </div>
           </div>
         </div>
 
-        <div class="pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-2">
+        <div class="pt-4 sm:pt-5 border-t border-zinc-200/50 flex flex-wrap items-center gap-1.5 sm:gap-2">
           ${tagsHTML}
         </div>
       </article>
@@ -271,8 +320,8 @@ document.addEventListener('DOMContentLoaded', () => {
          </a>`
       : '';
     return `
-      <article class="blog-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between">
-        <div class="space-y-5">
+      <article class="blog-card group glass-card rounded-3xl sm:rounded-4xl p-5 sm:p-8 md:p-10 space-y-5 sm:space-y-6 flex flex-col justify-between">
+        <div class="space-y-4 sm:space-y-5">
           ${coverHTML}
           <div class="flex items-center justify-between text-xs text-zinc-500 font-normal">
             <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl font-mono font-normal">
@@ -285,19 +334,19 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
 
-          <div class="space-y-2.5">
-            <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
+          <div class="space-y-2 sm:space-y-2.5">
+            <h3 class="text-lg sm:text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
               <a href="blog.html#${post.id}" class="blog-post-link block" data-post-id="${post.id}">
                 ${post.title}
               </a>
             </h3>
-            <p class="text-sm text-zinc-600 leading-relaxed font-normal">
+            <p class="text-xs sm:text-sm text-zinc-600 leading-relaxed font-normal">
               ${post.excerpt || ''}
             </p>
           </div>
         </div>
 
-        <div class="pt-5 border-t border-zinc-200/50 flex items-center justify-between gap-4">
+        <div class="pt-4 sm:pt-5 border-t border-zinc-200/50 flex items-center justify-between gap-4">
           <div class="flex flex-wrap items-center gap-2">
             ${tagsHTML}
           </div>
@@ -994,7 +1043,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginCornerBtn = document.createElement('button');
     loginCornerBtn.type = 'button';
     loginCornerBtn.title = 'Admin Sign In';
-    loginCornerBtn.className = 'fixed top-6 right-6 z-50 glass-pill rounded-2xl p-2.5 text-zinc-600 hover:text-zinc-900 hover:border-zinc-300/80 transition-all duration-200 flex items-center gap-2 cursor-pointer';
+    loginCornerBtn.className = 'hidden sm:flex fixed top-6 right-6 z-50 glass-pill rounded-2xl p-2.5 text-zinc-600 hover:text-zinc-900 hover:border-zinc-300/80 transition-all duration-200 items-center gap-2 cursor-pointer';
     loginCornerBtn.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
@@ -1059,6 +1108,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     loginCornerBtn.addEventListener('click', openModal);
+    document.querySelectorAll('.open-admin-login-modal').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const drawer = document.getElementById('mobile-menu-drawer');
+        if (drawer) drawer.classList.add('hidden');
+        openModal();
+      });
+    });
     document.getElementById('close-login-modal')?.addEventListener('click', closeModal);
     modalOverlay.addEventListener('click', (e) => {
       if (e.target === modalOverlay) closeModal();

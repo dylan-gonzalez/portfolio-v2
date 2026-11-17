@@ -1,3 +1,23 @@
+/* Responsive Viewport & Overflow Guards */
+html {
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+  position: relative;
+}
+
+img, video, iframe, figure, pre, table {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Global Typography: Helvetica Style & Zero Bold */
 
 *,
@@ -394,4 +414,21 @@ h1, h2, h3, h4, h5, h6, b, strong, th, button, input, textarea, select {
   background: #2563eb;
   color: #ffffff;
 }
+
+/* Mobile Navigation Drawer Animations & Backdrop */
+#mobile-menu-drawer {
+  animation: mobileMenuSlideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes mobileMenuSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 
