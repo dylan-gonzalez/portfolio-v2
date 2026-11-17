@@ -1,0 +1,74 @@
+/* Custom Styles for Dylan Gonzalez Portfolio */
+
+@layer components {
+  .tech-chip {
+    @apply inline-flex items-center px-3 py-1 bg-white border border-zinc-200/80 rounded-xl text-xs font-mono text-zinc-700 font-medium shadow-2xs hover:border-zinc-400 hover:text-zinc-950 transition-colors cursor-default;
+  }
+}
+
+/* Fallback & Custom Utility Classes */
+.tech-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  background-color: #ffffff;
+  border: 1px solid rgba(228, 228, 231, 0.9);
+  border-radius: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #3f3f46;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease;
+}
+
+.tech-chip:hover {
+  border-color: #71717a;
+  color: #09090b;
+}
+
+/* Nav Link States */
+.nav-link.active {
+  background-color: #18181b;
+  color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.nav-link.active:hover {
+  background-color: #27272a;
+  color: #ffffff;
+}
+
+/* Filter Button Active */
+.filter-btn.active {
+  background-color: #18181b;
+  color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth transitions */
+.project-card {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1aa;
+}
