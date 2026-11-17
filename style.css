@@ -417,6 +417,7 @@ h1, h2, h3, h4, h5, h6, b, strong, th, button, input, textarea, select {
 
 /* Mobile Navigation Drawer Animations & Backdrop */
 #mobile-menu-drawer {
+  top: 82px;
   animation: mobileMenuSlideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
