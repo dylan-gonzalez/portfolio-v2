@@ -36,15 +36,29 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Helper to create project card HTML
   const createProjectCardHTML = (project) => {
     const tagsHTML = project.tags.map(tag => `<span class="tech-chip">${tag}</span>`).join(' ');
+    const company = (project.company && typeof COMPANIES_DATA !== 'undefined') ? COMPANIES_DATA[project.company] : null;
     
+    // Crisp company logo badge
+    const companyBadge = company
+      ? `<button type="button" class="project-company-badge flex items-center gap-1.5 px-2.5 py-1 glass-subbox hover:bg-white/90 text-zinc-800 rounded-xl text-xs font-mono transition-all active:scale-95 shadow-2xs" data-company="${project.company}" title="Filter by ${company.name}">
+           <span class="w-4 h-4 rounded-md bg-white p-0.5 flex items-center justify-center shrink-0 shadow-2xs">
+             <img src="${company.logo}" alt="${company.name}" class="max-w-full max-h-full object-contain rounded-xs">
+           </span>
+           <span>${company.shortName || company.name}</span>
+         </button>`
+      : `<span class="px-2.5 py-1 glass-subbox text-zinc-700 rounded-xl text-xs font-mono font-normal">${project.categoryLabel}</span>`;
+
     return `
-      <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="${project.category}">
+      <article class="project-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between" data-category="${project.category}" data-company="${project.company || ''}">
         <div class="space-y-5">
-          <div class="flex items-center justify-between">
-            <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl text-xs font-mono font-normal">
-              ${project.categoryLabel}
-            </span>
-            <div class="flex items-center gap-2">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-1 glass-subbox text-zinc-500 rounded-xl text-xs font-mono capitalize">
+                ${project.category.replace('-', ' ')}
+              </span>
+              ${companyBadge}
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
               <a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl text-zinc-900 hover:bg-white/60 transition-colors" title="View Source on GitHub">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
                   <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
@@ -413,44 +427,333 @@ document.addEventListener('DOMContentLoaded', () => {
     window.lucide.createIcons();
   }
 
-  // 6. Project Filter Buttons (Works on both index and projects page)
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const setupFiltering = () => {
-    const projectCards = document.querySelectorAll('.project-card');
+  // 6. Project & Company Filtering + Interactive Map Spotlight
+  let companyMapInstance = null;
+  let companyMarkers = [];
+  let currentCompanyFilter = 'all';
+  let currentDisciplineFilter = 'all';
 
-    filterBtns.forEach(btn => {
+  const companyFilterBtns = document.querySelectorAll('.company-filter-btn');
+  const disciplineFilterBtns = document.querySelectorAll('.filter-btn');
+  const spotlightSection = document.getElementById('company-spotlight');
+  const noProjectsMsg = document.getElementById('no-projects-message');
+  const clearCompanyBtn = document.getElementById('clear-company-filter-btn');
+  const resetAllFiltersBtn = document.getElementById('reset-all-filters-btn');
+
+  // Interactive Leaflet Map for Company
+  const renderCompanyMap = (company) => {
+    const mapElement = document.getElementById('company-map');
+    if (!mapElement || typeof L === 'undefined') return;
+
+    if (!companyMapInstance) {
+      companyMapInstance = L.map('company-map', {
+        scrollWheelZoom: false,
+        zoomControl: true,
+        attributionControl: true
+      });
+
+      // OpenStreetMap standard tile layer (reliable, zero API key requirement)
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+        maxZoom: 19
+      }).addTo(companyMapInstance);
+    }
+
+    // Clear existing markers
+    companyMarkers.forEach(m => m.remove());
+    companyMarkers = [];
+
+    const bounds = [];
+
+    company.locations.forEach(loc => {
+      bounds.push([loc.lat, loc.lng]);
+
+      const isCompetition = (loc.tag || '').toLowerCase().includes('competition') || (loc.tag || '').toLowerCase().includes('challenge');
+
+      const pinIcon = L.divIcon({
+        className: 'custom-div-icon',
+        html: `
+          <div class="custom-map-pin ${isCompetition ? 'comp-pin' : 'hq-pin'}" title="${loc.name}">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5">
+              ${isCompetition 
+                ? '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>' 
+                : '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>'}
+            </svg>
+          </div>
+        `,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+        popupAnchor: [0, -18]
+      });
+
+      const marker = L.marker([loc.lat, loc.lng], { icon: pinIcon }).addTo(companyMapInstance);
+
+      const popupContent = `
+        <div class="p-1 space-y-1">
+          <div class="text-xs font-mono font-medium text-zinc-900">${loc.name}</div>
+          <div class="text-[10px] font-mono text-zinc-500 uppercase tracking-wide">${loc.tag}</div>
+          <p class="text-xs text-zinc-600 font-normal leading-relaxed">${loc.description}</p>
+        </div>
+      `;
+
+      marker.bindPopup(popupContent);
+      marker.locationData = loc;
+      companyMarkers.push(marker);
+    });
+
+    // Invalidate size & set view
+    setTimeout(() => {
+      if (companyMapInstance) {
+        companyMapInstance.invalidateSize();
+        if (bounds.length > 1) {
+          companyMapInstance.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
+        } else if (bounds.length === 1) {
+          companyMapInstance.setView(bounds[0], company.locations[0].zoom || 13);
+          if (companyMarkers[0]) companyMarkers[0].openPopup();
+        }
+      }
+    }, 150);
+
+    // Location Focus Switcher Buttons
+    const locButtons = document.querySelectorAll('.loc-focus-btn');
+    locButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        filterBtns.forEach(b => {
+        locButtons.forEach(b => {
           b.classList.remove('active');
+          b.classList.remove('bg-zinc-900', 'text-white');
           b.classList.add('text-zinc-600');
         });
-
         btn.classList.add('active');
+        btn.classList.add('bg-zinc-900', 'text-white');
         btn.classList.remove('text-zinc-600');
 
-        const filterValue = btn.getAttribute('data-filter');
-
-        projectCards.forEach(card => {
-          const category = card.getAttribute('data-category');
-          if (filterValue === 'all' || category === filterValue) {
-            card.style.display = 'flex';
-            setTimeout(() => {
-              card.style.opacity = '1';
-              card.style.transform = 'translateY(0)';
-            }, 10);
-          } else {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(8px)';
-            setTimeout(() => {
-              card.style.display = 'none';
-            }, 200);
+        const locId = btn.getAttribute('data-loc-id');
+        if (locId === 'all') {
+          companyMapInstance.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
+        } else {
+          const targetMarker = companyMarkers.find(m => m.locationData.id === locId);
+          if (targetMarker) {
+            companyMapInstance.flyTo([targetMarker.locationData.lat, targetMarker.locationData.lng], targetMarker.locationData.zoom || 13, { duration: 1.2 });
+            setTimeout(() => targetMarker.openPopup(), 1200);
           }
-        });
+        }
       });
     });
   };
 
-  setupFiltering();
+  // Update Spotlight Section
+  const updateSpotlightUI = (companyId) => {
+    if (!spotlightSection) return;
+
+    if (!companyId || companyId === 'all' || !window.COMPANIES_DATA || !window.COMPANIES_DATA[companyId]) {
+      spotlightSection.classList.add('hidden');
+      return;
+    }
+
+    const company = window.COMPANIES_DATA[companyId];
+    const matchingProjects = (window.PROJECTS_DATA || []).filter(p => p.company === companyId);
+
+    const logoEl = document.getElementById('spotlight-logo');
+    const nameEl = document.getElementById('spotlight-name');
+    const taglineEl = document.getElementById('spotlight-tagline');
+    const descEl = document.getElementById('spotlight-description');
+    const countEl = document.getElementById('spotlight-project-count');
+    const locBtnsContainer = document.getElementById('spotlight-location-buttons');
+
+    if (logoEl) { logoEl.src = company.logo; logoEl.alt = company.name; }
+    if (nameEl) nameEl.textContent = company.name;
+    if (taglineEl) taglineEl.textContent = company.tagline;
+    if (descEl) descEl.textContent = company.description;
+    if (countEl) countEl.textContent = `${matchingProjects.length} ${matchingProjects.length === 1 ? 'project' : 'projects'}`;
+
+    if (locBtnsContainer) {
+      if (company.locations && company.locations.length > 1) {
+        locBtnsContainer.innerHTML = `
+          <button type="button" class="loc-focus-btn active px-2.5 py-1 rounded-lg text-xs font-mono glass-subbox bg-zinc-900 text-white transition-all" data-loc-id="all">
+            Show All (${company.locations.length})
+          </button>
+          ${company.locations.map(loc => `
+            <button type="button" class="loc-focus-btn px-2.5 py-1 rounded-lg text-xs font-mono glass-subbox text-zinc-600 hover:text-zinc-900 transition-all" data-loc-id="${loc.id}">
+              ${loc.name.split(',')[0]} (${loc.tag.split(' ')[0]})
+            </button>
+          `).join('')}
+        `;
+      } else if (company.locations && company.locations.length === 1) {
+        locBtnsContainer.innerHTML = `
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 glass-subbox rounded-xl text-xs font-mono text-zinc-700">
+            <i data-lucide="map-pin" class="w-3 h-3 text-zinc-500"></i>
+            <span>${company.locations[0].name}</span>
+          </span>
+        `;
+      }
+    }
+
+    spotlightSection.classList.remove('hidden');
+    renderCompanyMap(company);
+
+    if (window.lucide) window.lucide.createIcons();
+  };
+
+  // Filter application to project cards
+  const applyFilters = () => {
+    const projectCards = document.querySelectorAll('#all-projects-container .project-card');
+    let visibleCount = 0;
+
+    projectCards.forEach(card => {
+      const cardCategory = card.getAttribute('data-category');
+      const cardCompany = card.getAttribute('data-company');
+
+      const matchesCompany = (currentCompanyFilter === 'all') || (cardCompany === currentCompanyFilter);
+      const matchesDiscipline = (currentDisciplineFilter === 'all') || (cardCategory === currentDisciplineFilter);
+
+      if (matchesCompany && matchesDiscipline) {
+        visibleCount++;
+        card.style.display = 'flex';
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 10);
+      } else {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(8px)';
+        setTimeout(() => {
+          card.style.display = 'none';
+        }, 200);
+      }
+    });
+
+    if (noProjectsMsg) {
+      if (visibleCount === 0 && projectCards.length > 0) {
+        noProjectsMsg.classList.remove('hidden');
+      } else {
+        noProjectsMsg.classList.add('hidden');
+      }
+    }
+
+    // Update URL query params without reloading
+    if (window.location.pathname.includes('projects.html')) {
+      const url = new URL(window.location);
+      if (currentCompanyFilter !== 'all') {
+        url.searchParams.set('company', currentCompanyFilter);
+      } else {
+        url.searchParams.delete('company');
+      }
+      if (currentDisciplineFilter !== 'all') {
+        url.searchParams.set('category', currentDisciplineFilter);
+      } else {
+        url.searchParams.delete('category');
+      }
+      window.history.replaceState(null, '', url.pathname + (url.search ? url.search : '') + url.hash);
+    }
+  };
+
+  const setCompanyFilter = (companyId, scrollIntoView = false) => {
+    currentCompanyFilter = companyId || 'all';
+
+    companyFilterBtns.forEach(btn => {
+      const btnCompany = btn.getAttribute('data-company');
+      const span = btn.querySelector('span');
+      if (btnCompany === currentCompanyFilter) {
+        btn.classList.add('active');
+        btn.classList.remove('text-zinc-600');
+        btn.classList.add('text-white');
+        if (span) {
+          span.classList.remove('text-zinc-600');
+          span.classList.add('text-white');
+        }
+      } else {
+        btn.classList.remove('active');
+        btn.classList.add('text-zinc-600');
+        btn.classList.remove('text-white');
+        if (span) {
+          span.classList.add('text-zinc-600');
+          span.classList.remove('text-white');
+        }
+      }
+    });
+
+    updateSpotlightUI(currentCompanyFilter);
+    applyFilters();
+
+    if (scrollIntoView && spotlightSection && currentCompanyFilter !== 'all') {
+      spotlightSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const setDisciplineFilter = (disciplineId) => {
+    currentDisciplineFilter = disciplineId || 'all';
+
+    disciplineFilterBtns.forEach(btn => {
+      const btnFilter = btn.getAttribute('data-filter');
+      if (btnFilter === currentDisciplineFilter) {
+        btn.classList.add('active');
+        btn.classList.remove('text-zinc-600');
+      } else {
+        btn.classList.remove('active');
+        btn.classList.add('text-zinc-600');
+      }
+    });
+
+    applyFilters();
+  };
+
+  // Wire up company filter buttons
+  companyFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const companyId = btn.getAttribute('data-company');
+      setCompanyFilter(companyId);
+    });
+  });
+
+  // Wire up discipline filter buttons
+  disciplineFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filterId = btn.getAttribute('data-filter');
+      setDisciplineFilter(filterId);
+    });
+  });
+
+  // Wire up clear and reset buttons
+  if (clearCompanyBtn) {
+    clearCompanyBtn.addEventListener('click', () => {
+      setCompanyFilter('all');
+    });
+  }
+
+  if (resetAllFiltersBtn) {
+    resetAllFiltersBtn.addEventListener('click', () => {
+      setCompanyFilter('all');
+      setDisciplineFilter('all');
+    });
+  }
+
+  // Delegated click handler for company badges inside project cards
+  document.addEventListener('click', (e) => {
+    const badge = e.target.closest('.project-company-badge');
+    if (badge) {
+      e.preventDefault();
+      const companyId = badge.getAttribute('data-company');
+      if (companyId) {
+        if (window.location.pathname.includes('projects.html')) {
+          setCompanyFilter(companyId, true);
+        } else {
+          window.location.href = `projects.html?company=${companyId}`;
+        }
+      }
+    }
+  });
+
+  // Check URL parameters on initial load
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialCompany = urlParams.get('company');
+  const initialCategory = urlParams.get('category');
+
+  if (initialCompany && window.COMPANIES_DATA && window.COMPANIES_DATA[initialCompany]) {
+    setCompanyFilter(initialCompany);
+  }
+  if (initialCategory) {
+    setDisciplineFilter(initialCategory);
+  }
 
   // 7. Active Tab Scroll Spy (for index.html sections)
   const sections = document.querySelectorAll('section[id]');

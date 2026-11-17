@@ -289,3 +289,109 @@ h1, h2, h3, h4, h5, h6, b, strong, th, button, input, textarea, select {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+/* Company Filter Buttons */
+.company-filter-btn.active {
+  background-color: #18181b !important;
+  color: #ffffff !important;
+  font-weight: 400 !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.company-filter-btn.active span {
+  color: #ffffff !important;
+}
+
+.loc-focus-btn.active {
+  background-color: #18181b !important;
+  color: #ffffff !important;
+  border-color: #18181b !important;
+}
+
+/* Leaflet Map Glassmorphic Customizations */
+.leaflet-container {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  background-color: #f4f4f5;
+  outline: none;
+  z-index: 10 !important;
+}
+
+.leaflet-pane {
+  z-index: 10 !important;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 20 !important;
+}
+
+.leaflet-bar {
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
+  border-radius: 0.75rem !important;
+  overflow: hidden;
+}
+
+.leaflet-bar a {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  color: #18181b !important;
+  border-bottom: 1px solid rgba(228, 228, 231, 0.8) !important;
+  transition: all 0.2s ease;
+}
+
+.leaflet-bar a:hover {
+  background-color: #18181b !important;
+  color: #ffffff !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+  color: #18181b !important;
+  padding: 0.35rem 0.5rem !important;
+}
+
+.leaflet-popup-tip {
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Custom Marker Pins */
+.custom-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.custom-map-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+
+.custom-map-pin:hover {
+  transform: scale(1.18);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.custom-map-pin.hq-pin {
+  background: #18181b;
+  color: #ffffff;
+}
+
+.custom-map-pin.comp-pin {
+  background: #2563eb;
+  color: #ffffff;
+}
+
