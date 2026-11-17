@@ -1,0 +1,210 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Static Portfolio Infrastructure for dylangonzalez.dev:
+  Route 53 Hosted Zone, S3 Bucket (private with OAC), ACM SSL Certificate,
+  CloudFront CDN Distribution (HTTP/2 & HTTP/3), and Route 53 Alias Records.
+
+Parameters:
+  DomainName:
+    Type: String
+    Default: dylangonzalez.dev
+    Description: Primary domain name for the portfolio website.
+
+  AcmCertificateArn:
+    Type: String
+    Default: ''
+    Description: >
+      (Optional) ARN of an existing ACM Certificate in us-east-1.
+      Leave blank if deploying this stack in us-east-1 (the stack will create the certificate automatically).
+      Required if deploying this stack in ap-southeast-2 (Sydney), since CloudFront requires certificates in us-east-1.
+
+Conditions:
+  CreateCertificate: !Equals [!Ref AcmCertificateArn, '']
+
+Resources:
+  # ---------------------------------------------------------------------------
+  # 1. Route 53 Hosted Zone (Global)
+  # ---------------------------------------------------------------------------
+  HostedZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: !Ref DomainName
+      HostedZoneConfig:
+        Comment: !Sub 'Hosted zone for ${DomainName} portfolio'
+
+  # ---------------------------------------------------------------------------
+  # 2. ACM SSL Certificate (Must be in us-east-1 for CloudFront)
+  # ---------------------------------------------------------------------------
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Condition: CreateCertificate
+    Properties:
+      DomainName: !Ref DomainName
+      SubjectAlternativeNames:
+        - !Sub 'www.${DomainName}'
+      ValidationMethod: DNS
+      DomainValidationOptions:
+        - DomainName: !Ref DomainName
+          HostedZoneId: !Ref HostedZone
+        - DomainName: !Sub 'www.${DomainName}'
+          HostedZoneId: !Ref HostedZone
+
+  # ---------------------------------------------------------------------------
+  # 3. S3 Bucket (Private — accessed exclusively via CloudFront OAC)
+  # ---------------------------------------------------------------------------
+  SiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref DomainName
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  # ---------------------------------------------------------------------------
+  # 4. CloudFront Origin Access Control (OAC) & Distribution
+  # ---------------------------------------------------------------------------
+  CloudFrontOAC:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub '${DomainName}-oac'
+        Description: !Sub 'Origin Access Control for ${DomainName} S3 bucket'
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: !Sub 'Portfolio CDN for ${DomainName}'
+        Enabled: true
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        DefaultRootObject: index.html
+        PriceClass: PriceClass_All
+        Aliases:
+          - !Ref DomainName
+          - !Sub 'www.${DomainName}'
+        Origins:
+          - Id: S3Origin
+            DomainName: !GetAtt SiteBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt CloudFrontOAC.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ''
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          CachedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          # AWS Managed CachingOptimized policy ID
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+        ViewerCertificate:
+          AcmCertificateArn: !If [CreateCertificate, !Ref Certificate, !Ref AcmCertificateArn]
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+
+  # ---------------------------------------------------------------------------
+  # 5. S3 Bucket Policy (Grants read access to CloudFront Distribution only)
+  # ---------------------------------------------------------------------------
+  SiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowCloudFrontServicePrincipalReadOnly
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub '${SiteBucket.Arn}/*'
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}'
+
+  # ---------------------------------------------------------------------------
+  # 6. Route 53 Alias Records (A & AAAA for Apex and www)
+  # ---------------------------------------------------------------------------
+  DNSRecordApexA:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZone
+      Name: !Ref DomainName
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        # Z2FDTNDATAQYW2 is the global CloudFront Hosted Zone ID constant
+        HostedZoneId: Z2FDTNDATAQYW2
+        EvaluateTargetHealth: false
+
+  DNSRecordApexAAAA:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZone
+      Name: !Ref DomainName
+      Type: AAAA
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+        EvaluateTargetHealth: false
+
+  DNSRecordWwwA:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZone
+      Name: !Sub 'www.${DomainName}'
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+        EvaluateTargetHealth: false
+
+  DNSRecordWwwAAAA:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZone
+      Name: !Sub 'www.${DomainName}'
+      Type: AAAA
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+        EvaluateTargetHealth: false
+
+Outputs:
+  Route53NameServers:
+    Description: Copy these 4 NameServers into GoDaddy DNS management for dylangonzalez.dev
+    Value: !Join [', ', !GetAtt HostedZone.NameServers]
+
+  HostedZoneId:
+    Description: Route 53 Hosted Zone ID
+    Value: !Ref HostedZone
+
+  S3BucketName:
+    Description: S3 Bucket for portfolio static files
+    Value: !Ref SiteBucket
+
+  CloudFrontDistributionId:
+    Description: CloudFront Distribution ID (use as CLOUDFRONT_DISTRIBUTION_ID secret in GitHub Actions)
+    Value: !Ref CloudFrontDistribution
+
+  CloudFrontDomainName:
+    Description: CloudFront default domain name
+    Value: !GetAtt CloudFrontDistribution.DomainName
+
+  WebsiteURL:
+    Description: Live HTTPS Portfolio URL
+    Value: !Sub 'https://${DomainName}'
