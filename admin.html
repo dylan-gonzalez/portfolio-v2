@@ -70,19 +70,24 @@
           <i data-lucide="lock" class="w-5 h-5"></i>
         </div>
         <div class="space-y-2">
-          <h1 class="text-2xl font-normal text-zinc-900">Unlock Blog Studio</h1>
+          <h1 class="text-2xl font-normal text-zinc-900">Sign In to Blog Studio</h1>
           <p class="text-xs sm:text-sm text-zinc-500">
-            Enter your admin key to write, upload images to S3, and publish posts to DynamoDB.
+            Sign in with your AWS Cognito account to write, upload images to S3, and publish posts to DynamoDB.
           </p>
         </div>
 
         <form id="login-form" class="space-y-4 text-left">
-          <div>
-            <input type="password" id="admin-key-input" required placeholder="Enter Admin Key..." class="w-full px-4 py-3 glass-subbox rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900">
+          <div class="space-y-1.5">
+            <label class="block text-xs text-zinc-600 uppercase">Email</label>
+            <input type="email" id="admin-email-input" required placeholder="dylcg10@gmail.com" class="w-full px-4 py-3 glass-subbox rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900">
           </div>
-          <p id="login-error" class="text-xs text-red-600 hidden">Invalid admin key. Please try again.</p>
-          <button type="submit" id="login-submit-btn" class="w-full py-3 bg-zinc-900 text-white hover:bg-zinc-800 rounded-2xl text-sm transition-all">
-            Unlock Studio
+          <div class="space-y-1.5">
+            <label class="block text-xs text-zinc-600 uppercase">Password</label>
+            <input type="password" id="admin-password-input" required placeholder="••••••••" class="w-full px-4 py-3 glass-subbox rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/10 focus:border-zinc-900">
+          </div>
+          <p id="login-error" class="text-xs text-red-600 hidden">Invalid email or password. Please try again.</p>
+          <button type="submit" id="login-submit-btn" class="w-full py-3.5 bg-zinc-900 text-white hover:bg-zinc-800 rounded-2xl text-sm transition-all cursor-pointer">
+            Sign In
           </button>
         </form>
       </div>
@@ -237,7 +242,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const API_URL = window.BLOG_API_URL;
-      let adminKey = sessionStorage.getItem('dg_blog_admin_key') || '';
+      let adminToken = sessionStorage.getItem('dg_cognito_token') || '';
       let allPosts = [];
       let currentCreatedAt = '';
       let isSlugManuallyEdited = false;
@@ -245,7 +250,9 @@
       const loginGate = document.getElementById('login-gate');
       const studioWorkspace = document.getElementById('studio-workspace');
       const loginForm = document.getElementById('login-form');
-      const adminKeyInput = document.getElementById('admin-key-input');
+      const adminEmailInput = document.getElementById('admin-email-input');
+      const adminPasswordInput = document.getElementById('admin-password-input');
+      const loginSubmitBtn = document.getElementById('login-submit-btn');
       const loginError = document.getElementById('login-error');
       const logoutBtn = document.getElementById('logout-btn');
 
@@ -370,7 +377,7 @@
 
       const fetchAdminPosts = async () => {
         const res = await fetch(`${API_URL}/posts`, {
-          headers: { 'x-admin-key': adminKey }
+          headers: { 'Authorization': `Bearer ${adminToken}` }
         });
         if (!res.ok) return;
         const data = await res.json();
@@ -398,38 +405,64 @@
         }
       };
 
-      const unlockStudio = async (keyToVerify) => {
+      const verifyExistingToken = async (tokenToVerify) => {
         try {
           const res = await fetch(`${API_URL}/auth`, {
             method: 'POST',
-            headers: { 'x-admin-key': keyToVerify }
+            headers: { 'Authorization': `Bearer ${tokenToVerify}` }
           });
-          if (!res.ok) throw new Error('Invalid key');
-          adminKey = keyToVerify;
-          sessionStorage.setItem('dg_blog_admin_key', adminKey);
+          if (!res.ok) throw new Error('Invalid token');
+          adminToken = tokenToVerify;
           loginGate.classList.add('hidden');
           studioWorkspace.classList.remove('hidden');
           logoutBtn.classList.remove('hidden');
           loginError.classList.add('hidden');
           await fetchAdminPosts();
         } catch {
-          sessionStorage.removeItem('dg_blog_admin_key');
-          loginError.classList.remove('hidden');
+          sessionStorage.removeItem('dg_cognito_token');
+          adminToken = '';
         }
       };
 
-      if (adminKey) {
-        unlockStudio(adminKey);
+      if (adminToken) {
+        verifyExistingToken(adminToken);
       }
 
-      loginForm.addEventListener('submit', (e) => {
+      loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        unlockStudio(adminKeyInput.value.trim());
+        const email = adminEmailInput.value.trim();
+        const password = adminPasswordInput.value;
+        loginSubmitBtn.disabled = true;
+        loginSubmitBtn.textContent = 'Signing in...';
+        loginError.classList.add('hidden');
+
+        try {
+          const res = await fetch(`${API_URL}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          if (!res.ok || !data.accessToken) throw new Error(data.error || 'Login failed');
+          adminToken = data.accessToken;
+          sessionStorage.setItem('dg_cognito_token', adminToken);
+          sessionStorage.setItem('dg_cognito_email', data.email || email);
+          loginGate.classList.add('hidden');
+          studioWorkspace.classList.remove('hidden');
+          logoutBtn.classList.remove('hidden');
+          await fetchAdminPosts();
+        } catch {
+          loginError.classList.remove('hidden');
+        } finally {
+          loginSubmitBtn.disabled = false;
+          loginSubmitBtn.textContent = 'Sign In';
+        }
       });
 
       logoutBtn.addEventListener('click', () => {
-        sessionStorage.removeItem('dg_blog_admin_key');
-        adminKey = '';
+        sessionStorage.removeItem('dg_cognito_token');
+        sessionStorage.removeItem('dg_cognito_email');
+        adminToken = '';
         studioWorkspace.classList.add('hidden');
         logoutBtn.classList.add('hidden');
         loginGate.classList.remove('hidden');
@@ -449,7 +482,7 @@
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  'x-admin-key': adminKey
+                  'Authorization': `Bearer ${adminToken}`
                 },
                 body: JSON.stringify({
                   filename: file.name,
@@ -551,7 +584,7 @@
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'x-admin-key': adminKey
+              'Authorization': `Bearer ${adminToken}`
             },
             body: JSON.stringify({
               id,
@@ -585,7 +618,7 @@
         if (!id || !confirm(`Delete post "${id}" from DynamoDB?`)) return;
         const res = await fetch(`${API_URL}/posts?id=${encodeURIComponent(id)}`, {
           method: 'DELETE',
-          headers: { 'x-admin-key': adminKey }
+          headers: { 'Authorization': `Bearer ${adminToken}` }
         });
         if (res.ok) {
           showStudioToast('Post deleted.');

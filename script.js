@@ -632,4 +632,112 @@ document.addEventListener('DOMContentLoaded', () => {
 
     requestAnimationFrame(animateTrail);
   }
+
+  // 11. Top-Right Corner Admin Login Button & Cognito Sign-In Modal
+  if (!window.location.pathname.endsWith('admin.html')) {
+    const loginCornerBtn = document.createElement('button');
+    loginCornerBtn.type = 'button';
+    loginCornerBtn.title = 'Admin Sign In';
+    loginCornerBtn.className = 'fixed top-6 right-6 z-50 glass-pill rounded-2xl p-2.5 text-zinc-600 hover:text-zinc-900 hover:border-zinc-300/80 transition-all duration-200 flex items-center gap-2 cursor-pointer';
+    loginCornerBtn.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      <span class="text-xs hidden sm:inline pr-1">Login</span>
+    `;
+    document.body.appendChild(loginCornerBtn);
+
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'fixed inset-0 z-50 bg-zinc-900/25 backdrop-blur-sm hidden items-center justify-center p-4';
+    modalOverlay.innerHTML = `
+      <div class="glass-panel rounded-4xl p-8 sm:p-10 w-full max-w-md space-y-6 relative shadow-xl border border-white/90 bg-white/80">
+        <button type="button" id="close-login-modal" class="absolute top-6 right-6 p-2 rounded-xl text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100/70 transition-colors cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+          </svg>
+        </button>
+
+        <div class="text-center space-y-2">
+          <div class="w-11 h-11 mx-auto rounded-2xl bg-zinc-900 text-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <h3 class="text-xl text-zinc-900">Admin Sign In</h3>
+          <p class="text-xs text-zinc-500">Sign in with your AWS Cognito credentials to open Blog Studio</p>
+        </div>
+
+        <form id="cognito-modal-form" class="space-y-4">
+          <div class="space-y-1.5">
+            <label class="block text-xs text-zinc-600 uppercase">Email</label>
+            <input type="email" id="cognito-modal-email" required placeholder="dylcg10@gmail.com" class="w-full px-4 py-3 glass-subbox rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-900">
+          </div>
+          <div class="space-y-1.5">
+            <label class="block text-xs text-zinc-600 uppercase">Password</label>
+            <input type="password" id="cognito-modal-password" required placeholder="••••••••" class="w-full px-4 py-3 glass-subbox rounded-2xl text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-900">
+          </div>
+          <p id="cognito-modal-error" class="text-xs text-red-600 hidden">Invalid email or password.</p>
+          <button type="submit" id="cognito-modal-submit" class="w-full py-3.5 bg-zinc-900 text-white hover:bg-zinc-800 rounded-2xl text-sm transition-all cursor-pointer">
+            Sign In to Studio
+          </button>
+        </form>
+      </div>
+    `;
+    document.body.appendChild(modalOverlay);
+
+    const openModal = () => {
+      const existingToken = sessionStorage.getItem('dg_cognito_token');
+      if (existingToken) {
+        window.location.href = 'admin.html';
+        return;
+      }
+      modalOverlay.classList.remove('hidden');
+      modalOverlay.classList.add('flex');
+      document.getElementById('cognito-modal-email')?.focus();
+    };
+
+    const closeModal = () => {
+      modalOverlay.classList.add('hidden');
+      modalOverlay.classList.remove('flex');
+    };
+
+    loginCornerBtn.addEventListener('click', openModal);
+    document.getElementById('close-login-modal')?.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    document.getElementById('cognito-modal-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('cognito-modal-email').value.trim();
+      const password = document.getElementById('cognito-modal-password').value;
+      const submitBtn = document.getElementById('cognito-modal-submit');
+      const errEl = document.getElementById('cognito-modal-error');
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in...';
+      errEl.classList.add('hidden');
+
+      try {
+        const res = await fetch(`${window.BLOG_API_URL}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.accessToken) {
+          throw new Error(data.error || 'Login failed');
+        }
+        sessionStorage.setItem('dg_cognito_token', data.accessToken);
+        sessionStorage.setItem('dg_cognito_email', data.email || email);
+        window.location.href = 'admin.html';
+      } catch (err) {
+        errEl.textContent = err.message || 'Invalid email or password.';
+        errEl.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign In to Studio';
+      }
+    });
+  }
 });
