@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (seeMoreBtn) {
       seeMoreBtn.innerHTML = `
-        <span>See ${remainingCount} more projects</span>
+        <span>See ${remainingCount} more in portfolio</span>
         <i data-lucide="arrow-right" class="w-4 h-4"></i>
       `;
     }
@@ -609,16 +609,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (matchesCompany && matchesDiscipline) {
         visibleCount++;
         card.style.display = 'flex';
-        setTimeout(() => {
-          card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
-        }, 10);
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
       } else {
+        card.style.display = 'none';
         card.style.opacity = '0';
         card.style.transform = 'translateY(8px)';
-        setTimeout(() => {
-          card.style.display = 'none';
-        }, 200);
       }
     });
 
@@ -645,6 +641,69 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       window.history.replaceState(null, '', url.pathname + (url.search ? url.search : '') + url.hash);
     }
+  };
+
+  // Robust Unified Reset Function
+  const resetAllFilters = () => {
+    currentCompanyFilter = 'all';
+    currentDisciplineFilter = 'all';
+
+    // 1. Reset Company Buttons
+    companyFilterBtns.forEach(btn => {
+      const btnCompany = btn.getAttribute('data-company');
+      const span = btn.querySelector('span');
+      if (btnCompany === 'all') {
+        btn.classList.add('active', 'text-white');
+        btn.classList.remove('text-zinc-600');
+        if (span) {
+          span.classList.remove('text-zinc-600');
+          span.classList.add('text-white');
+        }
+      } else {
+        btn.classList.remove('active', 'text-white');
+        btn.classList.add('text-zinc-600');
+        if (span) {
+          span.classList.add('text-zinc-600');
+          span.classList.remove('text-white');
+        }
+      }
+    });
+
+    // 2. Reset Discipline Buttons
+    disciplineFilterBtns.forEach(btn => {
+      const btnFilter = btn.getAttribute('data-filter');
+      if (btnFilter === 'all') {
+        btn.classList.add('active');
+        btn.classList.remove('text-zinc-600');
+      } else {
+        btn.classList.remove('active');
+        btn.classList.add('text-zinc-600');
+      }
+    });
+
+    // 3. Hide Spotlight & Empty Message
+    if (spotlightSection) {
+      spotlightSection.classList.add('hidden');
+    }
+    if (noProjectsMsg) {
+      noProjectsMsg.classList.add('hidden');
+    }
+
+    // 4. Force restore all project cards instantly
+    const projectCards = document.querySelectorAll('#all-projects-container .project-card');
+    projectCards.forEach(card => {
+      card.style.display = 'flex';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    });
+
+    // 5. Clean URL query parameters
+    if (window.location.pathname.includes('projects.html')) {
+      const cleanUrl = window.location.pathname + window.location.hash;
+      window.history.replaceState(null, '', cleanUrl);
+    }
+
+    if (window.lucide) window.lucide.createIcons();
   };
 
   const setCompanyFilter = (companyId, scrollIntoView = false) => {
@@ -714,18 +773,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Wire up clear and reset buttons
-  if (clearCompanyBtn) {
-    clearCompanyBtn.addEventListener('click', () => {
-      setCompanyFilter('all');
+  document.querySelectorAll('#clear-company-filter-btn, #reset-all-filters-btn, .reset-filters-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      resetAllFilters();
     });
-  }
-
-  if (resetAllFiltersBtn) {
-    resetAllFiltersBtn.addEventListener('click', () => {
-      setCompanyFilter('all');
-      setDisciplineFilter('all');
-    });
-  }
+  });
 
   // Delegated click handler for company badges inside project cards
   document.addEventListener('click', (e) => {
