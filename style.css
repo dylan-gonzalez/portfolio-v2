@@ -57,6 +57,14 @@ h1, h2, h3, h4, h5, h6, b, strong, th, button, input, textarea, select {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
+.headshot-img {
+  image-rendering: auto;
+  image-rendering: -webkit-optimize-contrast;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
 /* Fallback & Custom Utility Classes */
 .tech-chip {
   display: inline-flex;
