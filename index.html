@@ -122,6 +122,9 @@
         <a href="#projects" class="nav-link px-4 py-1.5 text-xs sm:text-sm font-normal rounded-xl text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/60 transition-all duration-200" data-section="projects">
           Projects
         </a>
+        <a href="#blog" class="nav-link px-4 py-1.5 text-xs sm:text-sm font-normal rounded-xl text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/60 transition-all duration-200" data-section="blog">
+          Blog
+        </a>
         <a href="#contact" class="nav-link px-4 py-1.5 text-xs sm:text-sm font-normal rounded-xl text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/60 transition-all duration-200" data-section="contact">
           Contact
         </a>
@@ -289,6 +292,44 @@
     </section>
 
 
+    <!-- ==================== BLOG SECTION ==================== -->
+    <section id="blog" class="space-y-12 scroll-mt-36">
+
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-zinc-200/80 pb-8">
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 glass-subbox rounded-xl text-xs font-normal text-zinc-700">
+            <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+            <span>Writing &amp; Notes</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-normal text-zinc-900 tracking-tight">Blog</h2>
+          <p class="text-sm sm:text-base text-zinc-500 font-normal max-w-xl">
+            Articles, architecture notes, and lessons learned across robotics, embedded systems, and software engineering.
+          </p>
+        </div>
+
+        <a href="blog.html" class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 transition-colors">
+          <span>View all posts</span>
+          <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+      <!-- Latest 2 Blog Posts (Populated dynamically from blog-data.js) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="home-blog-container">
+        <!-- Populated dynamically by script.js -->
+      </div>
+
+      <!-- Dynamic "See X more posts" Button (shown automatically when > 2 posts exist) -->
+      <div class="text-center pt-4 hidden" id="see-more-blog-wrapper">
+        <a href="blog.html" id="see-more-blog-btn" class="inline-flex items-center gap-3 px-8 py-4 glass-card hover:bg-white/90 text-zinc-900 rounded-3xl font-normal text-sm shadow-sm hover:shadow-md transition-all duration-200 active:scale-[0.98]">
+          <span>See <span id="see-more-blog-count">0</span> more posts</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+    </section>
+
+
     <!-- ==================== CONTACT SECTION ==================== -->
     <section id="contact" class="space-y-16 scroll-mt-36">
 
@@ -413,6 +454,7 @@
       <div class="flex items-center gap-6 font-normal">
         <a href="/" class="hover:text-zinc-900 transition-colors">Home</a>
         <a href="projects.html" class="hover:text-zinc-900 transition-colors">Projects</a>
+        <a href="blog.html" class="hover:text-zinc-900 transition-colors">Blog</a>
         <a href="#contact" class="hover:text-zinc-900 transition-colors">Contact</a>
         <a href="/" class="p-1.5 rounded-xl hover:bg-zinc-100/60 text-zinc-600 hover:text-zinc-900 transition-colors" title="Back to top">
           <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
@@ -431,6 +473,7 @@
   </div>
 
   <script src="projects-data.js"></script>
+  <script src="blog-data.js"></script>
   <script src="script.js"></script>
   <script>
     // Initialize Lucide icons

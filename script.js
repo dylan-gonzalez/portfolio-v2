@@ -114,6 +114,133 @@ document.addEventListener('DOMContentLoaded', () => {
     allProjectsContainer.innerHTML = PROJECTS_DATA.map(createProjectCardHTML).join('');
   }
 
+  // 4b. Helper to create Blog Card HTML
+  const createBlogCardHTML = (post) => {
+    const tagsHTML = (post.tags || []).map(tag => `<span class="tech-chip">${tag}</span>`).join(' ');
+    return `
+      <article class="blog-card group glass-card rounded-4xl p-8 sm:p-10 space-y-6 flex flex-col justify-between">
+        <div class="space-y-5">
+          <div class="flex items-center justify-between text-xs text-zinc-500 font-normal">
+            <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl font-mono font-normal">
+              ${post.category}
+            </span>
+            <div class="flex items-center gap-3 font-mono">
+              <span>${post.date}</span>
+              <span>&bull;</span>
+              <span>${post.readTime}</span>
+            </div>
+          </div>
+
+          <div class="space-y-2.5">
+            <h3 class="text-xl font-normal text-zinc-900 group-hover:text-zinc-700 transition-colors">
+              <a href="blog.html#${post.id}" class="blog-post-link block" data-post-id="${post.id}">
+                ${post.title}
+              </a>
+            </h3>
+            <p class="text-sm text-zinc-600 leading-relaxed font-normal">
+              ${post.excerpt}
+            </p>
+          </div>
+        </div>
+
+        <div class="pt-5 border-t border-zinc-200/50 flex items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-2">
+            ${tagsHTML}
+          </div>
+          <a href="blog.html#${post.id}" class="blog-post-link inline-flex items-center gap-1.5 text-xs text-zinc-800 hover:text-zinc-950 font-normal shrink-0 transition-colors" data-post-id="${post.id}">
+            <span>Read post</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </article>
+    `;
+  };
+
+  // 4c. Render Latest 2 Blog Posts on Home Page
+  const homeBlogContainer = document.getElementById('home-blog-container');
+  const seeMoreBlogWrapper = document.getElementById('see-more-blog-wrapper');
+  const seeMoreBlogBtn = document.getElementById('see-more-blog-btn');
+
+  if (homeBlogContainer && typeof BLOG_DATA !== 'undefined') {
+    const firstTwoPosts = BLOG_DATA.slice(0, 2);
+    homeBlogContainer.innerHTML = firstTwoPosts.map(createBlogCardHTML).join('');
+
+    const remainingPosts = Math.max(0, BLOG_DATA.length - 2);
+    if (seeMoreBlogWrapper && seeMoreBlogBtn && remainingPosts > 0) {
+      seeMoreBlogWrapper.classList.remove('hidden');
+      seeMoreBlogBtn.innerHTML = `
+        <span>See ${remainingPosts} more ${remainingPosts === 1 ? 'post' : 'posts'}</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      `;
+    }
+  }
+
+  // 4d. Render All Blog Posts & Full Article Reader on blog.html
+  const allBlogContainer = document.getElementById('all-blog-container');
+  const blogListView = document.getElementById('blog-list-view');
+  const blogArticleView = document.getElementById('blog-article-view');
+  const blogArticleContent = document.getElementById('blog-article-content');
+  const backToBlogListBtn = document.getElementById('back-to-blog-list');
+
+  const renderBlogReader = () => {
+    if (!blogListView || !blogArticleView || !blogArticleContent || typeof BLOG_DATA === 'undefined') return;
+    const hashId = window.location.hash.replace(/^#/, '');
+    const post = BLOG_DATA.find(p => p.id === hashId);
+
+    if (post) {
+      const tagsHTML = (post.tags || []).map(tag => `<span class="tech-chip">${tag}</span>`).join(' ');
+      const bodyHTML = (post.content || []).map(block => {
+        if (block.trim().startsWith('<')) return block;
+        return `<p class="text-sm sm:text-base text-zinc-700 leading-relaxed font-normal">${block}</p>`;
+      }).join('');
+
+      blogArticleContent.innerHTML = `
+        <header class="space-y-4 border-b border-zinc-200/70 pb-8">
+          <div class="flex flex-wrap items-center gap-3 text-xs text-zinc-500 font-mono font-normal">
+            <span class="px-3 py-1 glass-subbox text-zinc-800 rounded-xl">${post.category}</span>
+            <span>${post.date}</span>
+            <span>&bull;</span>
+            <span>${post.readTime}</span>
+          </div>
+          <h1 class="text-2xl sm:text-4xl font-normal text-zinc-900 tracking-tight leading-tight">
+            ${post.title}
+          </h1>
+        </header>
+
+        <div class="space-y-5">
+          ${bodyHTML}
+        </div>
+
+        <footer class="pt-6 border-t border-zinc-200/60 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-2">
+            ${tagsHTML}
+          </div>
+        </footer>
+      `;
+
+      blogListView.classList.add('hidden');
+      blogArticleView.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.lucide) window.lucide.createIcons();
+    } else {
+      blogArticleView.classList.add('hidden');
+      blogListView.classList.remove('hidden');
+    }
+  };
+
+  if (allBlogContainer && typeof BLOG_DATA !== 'undefined') {
+    allBlogContainer.innerHTML = BLOG_DATA.map(createBlogCardHTML).join('');
+    renderBlogReader();
+    window.addEventListener('hashchange', renderBlogReader);
+
+    if (backToBlogListBtn) {
+      backToBlogListBtn.addEventListener('click', () => {
+        window.history.pushState(null, '', window.location.pathname);
+        renderBlogReader();
+      });
+    }
+  }
+
   // 5. Re-initialize Lucide icons after dynamic rendering
   if (window.lucide) {
     window.lucide.createIcons();
